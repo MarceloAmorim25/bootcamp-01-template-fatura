@@ -1,36 +1,24 @@
 package br.com.fatura.dtos;
 
 import br.com.fatura.entidades.Fatura;
-import br.com.fatura.entidades.Transacao;
-
-import java.util.ArrayList;
-import java.util.HashSet;
+import java.math.BigDecimal;
 import java.util.List;
-import java.util.Set;
+
 
 public class FaturaDto {
 
 
+    private BigDecimal total;
+
     private String email;
 
-    private List<TransacaoDto> transacoes = new ArrayList<>();
+    private List<TransacaoDto> transacoes;
 
 
     public FaturaDto(Fatura fatura) {
         this.email = fatura.getCartao().getEmail();
-        this.transacoes = toDtoSet(fatura.getTransacoes());
-    }
-
-    public List<TransacaoDto> toDtoSet(Set<Transacao> transacoes){
-
-        List<TransacaoDto> transacaoDtos = new ArrayList<>();
-
-        transacoes.forEach(transacao -> {
-            transacaoDtos.add(new TransacaoDto(transacao));
-        });
-
-        return transacaoDtos;
-
+        this.transacoes = fatura.toDtoSet();
+        this.total = fatura.calculaEbuscaTotal();
     }
 
     public String getEmail() {
@@ -47,5 +35,13 @@ public class FaturaDto {
 
     public void setTransacoes(List<TransacaoDto> transacoes) {
         this.transacoes = transacoes;
+    }
+
+    public BigDecimal getTotal() {
+        return total;
+    }
+
+    public void setTotal(BigDecimal total) {
+        this.total = total;
     }
 }

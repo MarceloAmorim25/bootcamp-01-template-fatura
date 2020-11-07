@@ -29,9 +29,8 @@ public class TransacaoConsumer {
 
     private final ProcessaTransacaoService processaTransacaoService;
 
-
-
     private final Logger logger = LoggerFactory.getLogger(Fatura.class);
+
 
 
     public TransacaoConsumer(FaturaRepository faturaRepository, CartaoRepository cartaoRepository,
@@ -46,7 +45,8 @@ public class TransacaoConsumer {
 
 
     @KafkaListener(topics="${spring.kafka.topic.transactions}")
-    public void consume(RecebeTransacao transacaoRecebida) {
+    public void consume(RecebeTransacao transacaoRecebida)  {
+
 
         var cartao = processaTransacaoService.buscaCartao(transacaoRecebida, cartaoRepository);
 
