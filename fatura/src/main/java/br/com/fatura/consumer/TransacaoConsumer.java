@@ -6,12 +6,14 @@ import br.com.fatura.entidades.Fatura;
 import br.com.fatura.entidades.Transacao;
 import br.com.fatura.repository.CartaoRepository;
 import br.com.fatura.repository.FaturaRepository;
+import br.com.fatura.repository.TransacaoRepository;
+import br.com.fatura.service.ProcessaTransacaoService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
-
 import javax.persistence.EntityManager;
+import javax.transaction.Transactional;
 import java.util.Optional;
 
 
@@ -23,39 +25,36 @@ public class TransacaoConsumer {
 
     private final CartaoRepository cartaoRepository;
 
-    private final EntityManager entityManager;
+    private final TransacaoRepository transacaoRepository;
+
+    private final ProcessaTransacaoService processaTransacaoService;
+
+
 
     private final Logger logger = LoggerFactory.getLogger(Fatura.class);
 
 
-    public TransacaoConsumer(FaturaRepository faturaRepository, CartaoRepository cartaoRepository, EntityManager entityManager) {
+    public TransacaoConsumer(FaturaRepository faturaRepository, CartaoRepository cartaoRepository,
+                             TransacaoRepository transacaoRepository, ProcessaTransacaoService processaTransacaoService) {
+
         this.faturaRepository = faturaRepository;
         this.cartaoRepository = cartaoRepository;
-        this.entityManager = entityManager;
+        this.transacaoRepository = transacaoRepository;
+        this.processaTransacaoService = processaTransacaoService;
+
     }
+
 
     @KafkaListener(topics="${spring.kafka.topic.transactions}")
     public void consume(RecebeTransacao transacaoRecebida) {
 
+        var cartao = processaTransacaoService.buscaCartao(transacaoRecebida, cartaoRepository);
 
-        Cartao cartao = transacaoRecebida.retornaModeloCartao();
+        var fatura = processaTransacaoService
+                .buscaFatura(transacaoRecebida, cartao, faturaRepository);
 
-        Transacao transacao = transacaoRecebida.toModel(cartaoRepository);
-
-        Optional<Fatura> fatura = faturaRepository.findByCartao(cartao);
-
-
-        if(!fatura.isPresent()){
-
-            Fatura novaFatura = new Fatura(transacaoRecebida);
-            faturaRepository.save(novaFatura);
-
-        }else{
-
-            fatura.get().adicionarTransacao(transacao);
-            entityManager.merge(fatura);
-
-        }
+        processaTransacaoService
+                .registraTransacao(transacaoRecebida, cartaoRepository, transacaoRepository, fatura);
 
         logger.info("[TRANSACAO] transação de valor = {} realizada por = {} no estabelecimento = {} ",
                 transacaoRecebida.getValor(),transacaoRecebida.getCartao().getEmail(), transacaoRecebida.getEstabelecimento().getNome());

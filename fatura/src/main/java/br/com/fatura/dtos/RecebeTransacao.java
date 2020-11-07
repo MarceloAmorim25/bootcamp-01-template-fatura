@@ -1,9 +1,10 @@
 package br.com.fatura.dtos;
 
-import br.com.fatura.entidades.Cartao;
 import br.com.fatura.entidades.Estabelecimento;
+import br.com.fatura.entidades.Fatura;
 import br.com.fatura.entidades.Transacao;
 import br.com.fatura.repository.CartaoRepository;
+import br.com.fatura.repository.FaturaRepository;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -40,15 +41,10 @@ public class RecebeTransacao {
         this.estabelecimento = estabelecimento;
     }
 
-    public Transacao toModel(CartaoRepository cartaoRepository){
-
-        return new Transacao(id, valor, efetivadaEm, cartao.toModel(),estabelecimento);
-
+    public Transacao toModel(CartaoRepository cartaoRepository, Fatura fatura){
+        return new Transacao(id, valor, efetivadaEm, cartao, estabelecimento, cartaoRepository, fatura);
     }
 
-    public Cartao retornaModeloCartao(){
-        return this.cartao.toModel();
-    }
 
     public String getId() {
         return id;
