@@ -13,6 +13,8 @@ import br.com.fatura.repository.RenegociacaoRepository;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.persistence.EntityManager;
+import javax.transaction.Transactional;
 import java.util.Objects;
 
 
@@ -31,63 +33,106 @@ public class FaturaResource {
 
     private final IntegracaoApiCartoes integracaoApiCartoes;
 
+    private final EntityManager entityManager;
+
 
     public FaturaResource(FaturaRepository faturaRepository, CartaoRepository cartaoRepository,
                           IntegracaoApiCartoes integracaoApiCartoes, ParcelaRepository parcelaRepository,
-                          RenegociacaoRepository renegociacaoRepository) {
+                          RenegociacaoRepository renegociacaoRepository, EntityManager entityManager) {
         this.faturaRepository = faturaRepository;
         this.cartaoRepository = cartaoRepository;
         this.integracaoApiCartoes = integracaoApiCartoes;
         this.parcelaRepository = parcelaRepository;
         this.renegociacaoRepository = renegociacaoRepository;
+        this.entityManager = entityManager;
     }
 
 
-    @GetMapping
+    @GetMapping("/{numeroCartao}")
     public ResponseEntity<?> buscaAtual(@PathVariable String numeroCartao){
+
+        var cartao =
+                cartaoRepository.findByNumero(numeroCartao);
+
+        if(cartao.isPresent()){
+
+            var fatura =
+                    faturaRepository.findByCartao(cartao.get());
+
+            return ResponseEntity.ok(new FaturaDto(fatura.get()));
+
+        }
+
+        return ResponseEntity.notFound().build();
+
+    }
+
+    @GetMapping("/{numeroCartao}/{mes}/{ano}")
+    public ResponseEntity<?> consultaAnteriores(@PathVariable String numeroCartao,
+                                                @PathVariable int mes, @PathVariable int ano){
 
         var cartao = cartaoRepository.findByNumero(numeroCartao);
 
-        var fatura = faturaRepository.findByCartao(cartao.get());
+        if(cartao.isPresent()){
 
-        return ResponseEntity.ok(new FaturaDto(fatura.get()));
+            var fatura = cartao.get().buscaFaturasPorPeriodo(mes, ano);
+
+            return ResponseEntity.ok(fatura);
+
+        }
+
+        return ResponseEntity.notFound().build();
 
     }
 
+    @Transactional
     @PostMapping("/{numeroCartao}/parcelas/{identificadorFatura}")
     public ResponseEntity<?> parcela(@PathVariable String numeroCartao, @PathVariable String identificadorFatura,
                                      @RequestBody ParcelaRequest parcelaRequest){
 
-        var parcela = parcelaRequest.toModel();
+        var fatura = faturaRepository.findById(identificadorFatura);
 
-        parcelaRepository.save(parcela);
+        if(fatura.isPresent()){
 
-        var respostaApiCartoes =
-                Objects.requireNonNull(integracaoApiCartoes.solicitarParcelamento(numeroCartao, parcelaRequest).getBody()).getResultado();
+            var parcela = parcelaRequest.toModel(fatura.get());
 
-        parcela.setStatus(StatusAprovacao.valueOf(respostaApiCartoes));
+            parcelaRepository.save(parcela);
 
-        return ResponseEntity.ok().build();
+            parcela.avisaLegadoEAtualizaStatus(integracaoApiCartoes, numeroCartao, parcelaRequest, entityManager);
+
+            return ResponseEntity.ok().build();
+
+        }
+
+        return ResponseEntity.notFound().build();
 
     }
 
+
+    @Transactional
     @PostMapping("/{numeroCartao}/renegociacoes/{identificadorFatura}")
     public ResponseEntity<?> renegocia(@PathVariable String numeroCartao, @PathVariable String identificadorFatura,
                                        @RequestBody RenegociacaoRequest renegociacaoRequest){
 
-        var renegociacao = renegociacaoRequest.toModel();
+        var fatura = faturaRepository.findById(identificadorFatura);
 
-        renegociacaoRepository.save(renegociacao);
+        if(fatura.isPresent()){
 
-        var respostaApiCartoes =
-                Objects.requireNonNull(integracaoApiCartoes.renegociacaoFatura(numeroCartao, renegociacaoRequest).getBody()).getResultado();
+            var renegociacao = renegociacaoRequest.toModel(fatura.get());
 
-        renegociacao.setStatus(StatusAprovacao.valueOf(respostaApiCartoes));
+            renegociacaoRepository.save(renegociacao);
 
-        return ResponseEntity.ok().build();
+            renegociacao.avisaLegadoAtualizaStatus(integracaoApiCartoes,numeroCartao, renegociacaoRequest, entityManager);
+
+            return ResponseEntity.ok().build();
+
+        }
+
+        return ResponseEntity.notFound().build();
 
     }
 
+    @Transactional
     @PutMapping("/{numeroCartao}/vencimentos/{identificadorFatura}")
     public ResponseEntity<?> alteraVencimento(@PathVariable String numeroCartao, @PathVariable String identificadorFatura,
                                               @RequestBody AlteraVencimentoRequest alteraVencimentoRequest){
@@ -95,34 +140,10 @@ public class FaturaResource {
         var fatura =
                 faturaRepository.findById(identificadorFatura).orElseThrow();
 
-        fatura.alteraVencimento(alteraVencimentoRequest.getDia());
-
-        var resultadoAviso = Objects.requireNonNull(integracaoApiCartoes.avisaAlteracaoVencimento
-                (numeroCartao, alteraVencimentoRequest).getBody()).getResultado();
-
-        fatura.setStatusAlteracaoVencimento(StatusAprovacao.valueOf(resultadoAviso));
-
-        faturaRepository.save(fatura);
+        fatura.avisaLegadoAtualizaVencimento(alteraVencimentoRequest, integracaoApiCartoes, numeroCartao, entityManager);
 
         return ResponseEntity.ok().build();
 
     }
 
-    @GetMapping("/{numeroCartao}/{identificadorFatura}/{mes}/{ano}")
-    public ResponseEntity<?> consultaAnteriores(@PathVariable String numeroCartao,
-                                                @PathVariable Integer mes, @PathVariable Integer ano){
-
-        var cartao =
-                cartaoRepository.findByNumero(numeroCartao).orElseThrow();
-
-        var faturas = cartao.getFaturas();
-
-        var fatura = faturas
-                .stream()
-                .filter(f -> f.getMes().getValue() == mes && f.getGeradaEm().getYear() == ano)
-                .findFirst().orElseThrow();
-
-        return ResponseEntity.ok(new FaturaDto(fatura));
-
-    }
 }

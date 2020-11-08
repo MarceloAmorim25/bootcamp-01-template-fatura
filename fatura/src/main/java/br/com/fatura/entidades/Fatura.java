@@ -1,8 +1,10 @@
 package br.com.fatura.entidades;
 
+import br.com.fatura.dtos.AlteraVencimentoRequest;
 import br.com.fatura.dtos.RecebeTransacao;
 import br.com.fatura.dtos.TransacaoDto;
 import br.com.fatura.entidades.enums.StatusAprovacao;
+import br.com.fatura.integracoes.IntegracaoApiCartoes;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import org.hibernate.annotations.GenericGenerator;
 import javax.persistence.*;
@@ -14,6 +16,7 @@ import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 
@@ -27,6 +30,12 @@ public class Fatura {
 
     @OneToMany(mappedBy = "fatura", fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
     private List<Transacao> transacoes = new ArrayList<>();
+
+    @OneToMany(mappedBy = "fatura", cascade = CascadeType.MERGE)
+    private List<Parcela> parcelas = new ArrayList<>();
+
+    @OneToMany(mappedBy = "fatura", cascade = CascadeType.MERGE)
+    private List<Renegociacao> renegociacoes = new ArrayList<>();
 
     @ManyToOne
     private Cartao cartao;
@@ -99,12 +108,43 @@ public class Fatura {
 
     }
 
+    public void avisaLegadoAtualizaVencimento(AlteraVencimentoRequest alteraVencimentoRequest,
+                                              IntegracaoApiCartoes integracaoApiCartoes, String numeroCartao,
+                                              EntityManager entityManager){
+
+        this.alteraVencimento(alteraVencimentoRequest.getDia());
+
+        var resultadoAviso = Objects.requireNonNull(integracaoApiCartoes.avisaAlteracaoVencimento
+                (numeroCartao, alteraVencimentoRequest).getBody()).getResultado();
+
+        this.setStatusAlteracaoVencimento(StatusAprovacao.valueOf(resultadoAviso));
+
+        entityManager.merge(this);
+
+    }
+
     public StatusAprovacao getStatusAlteracaoVencimento() {
         return statusAlteracaoVencimento;
     }
 
     public void setStatusAlteracaoVencimento(StatusAprovacao statusAlteracaoVencimento) {
         this.statusAlteracaoVencimento = statusAlteracaoVencimento;
+    }
+
+    public List<Parcela> getParcelas() {
+        return parcelas;
+    }
+
+    public void setParcelas(List<Parcela> parcelas) {
+        this.parcelas = parcelas;
+    }
+
+    public List<Renegociacao> getRenegociacoes() {
+        return renegociacoes;
+    }
+
+    public void setRenegociacoes(List<Renegociacao> renegociacoes) {
+        this.renegociacoes = renegociacoes;
     }
 
     public LocalDateTime getGeradaEm() {

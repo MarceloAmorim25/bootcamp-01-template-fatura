@@ -1,5 +1,6 @@
 package br.com.fatura.dtos;
 
+import br.com.fatura.entidades.Fatura;
 import br.com.fatura.entidades.Parcela;
 
 import javax.validation.constraints.NotBlank;
@@ -28,8 +29,8 @@ public class ParcelaRequest {
         this.valor = valor;
     }
 
-    public Parcela toModel(){
-        return new Parcela(identificadorDaFatura, quantidade, valor);
+    public Parcela toModel(Fatura fatura){
+        return new Parcela(identificadorDaFatura, quantidade, valor, fatura);
     }
 
     public String getIdentificadorDaFatura() {

@@ -1,5 +1,6 @@
 package br.com.fatura.dtos;
 
+import br.com.fatura.entidades.Fatura;
 import br.com.fatura.entidades.Renegociacao;
 
 import java.math.BigDecimal;
@@ -23,8 +24,8 @@ public class RenegociacaoRequest {
         this.valor = valor;
     }
 
-    public Renegociacao toModel(){
-        return new Renegociacao(identificadorDaFatura, quantidade, valor);
+    public Renegociacao toModel(Fatura fatura){
+        return new Renegociacao(identificadorDaFatura, quantidade, valor, fatura);
     }
 
     public String getIdentificadorDaFatura() {

@@ -44,8 +44,6 @@ public class ProcessaTransacaoService {
         var fatura = faturaRepository.findByCartao(cartao);
 
         if(fatura.isPresent()){
-
-            logger.info("Fatura foi buscada com sucesso. Mês referente = {}", fatura.get().getMes());
             return fatura.get();
         }
 

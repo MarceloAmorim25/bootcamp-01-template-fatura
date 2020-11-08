@@ -1,13 +1,12 @@
 package br.com.fatura.entidades;
 
+import br.com.fatura.dtos.FaturaDto;
 import org.hibernate.annotations.GenericGenerator;
-
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
+
 
 @Entity
 public class Cartao {
@@ -35,6 +34,18 @@ public class Cartao {
     public Cartao(String numero, String email) {
         this.numero = numero;
         this.email = email;
+    }
+
+    public FaturaDto buscaFaturasPorPeriodo(int mes, int ano){
+
+        var fatura = this.faturas
+                    .stream()
+                    .filter(f -> f.getMes().getValue() == mes && f.getGeradaEm().getYear() == ano)
+                    .findAny()
+                    .orElseThrow();
+
+        return new FaturaDto(fatura);
+
     }
 
     public String getId() {

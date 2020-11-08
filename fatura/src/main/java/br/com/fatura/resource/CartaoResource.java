@@ -4,10 +4,7 @@ import br.com.fatura.integracoes.IntegracaoApiCartoes;
 import br.com.fatura.repository.CartaoRepository;
 import br.com.fatura.repository.FaturaRepository;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Objects;
 
@@ -31,7 +28,7 @@ public class CartaoResource {
     }
 
 
-    @PutMapping("/{numeroCartao}")
+    @GetMapping("/{numeroCartao}")
     public ResponseEntity<?> consultaSaldo(@PathVariable String numeroCartao){
 
         var cartao = cartaoRepository.findByNumero(numeroCartao);
