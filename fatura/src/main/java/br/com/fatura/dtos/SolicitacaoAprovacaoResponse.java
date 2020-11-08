@@ -1,13 +1,13 @@
 package br.com.fatura.dtos;
 
-public class SolicitacaoParcelamentoResponse {
+public class SolicitacaoAprovacaoResponse {
 
     private String resultado;
 
     @Deprecated
-    public SolicitacaoParcelamentoResponse(){}
+    public SolicitacaoAprovacaoResponse(){}
 
-    public SolicitacaoParcelamentoResponse(String resultado) {
+    public SolicitacaoAprovacaoResponse(String resultado) {
         this.resultado = resultado;
     }
 

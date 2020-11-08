@@ -15,15 +15,15 @@ public interface IntegracaoApiCartoes {
     ResponseEntity<LimiteResponse> buscarLimiteCartao(@PathVariable String numeroCartao);
 
     @PostMapping("{numeroCartao}/parcelas")
-    ResponseEntity<SolicitacaoParcelamentoResponse> solicitarParcelamento
+    ResponseEntity<SolicitacaoAprovacaoResponse> solicitarParcelamento
             (@PathVariable String numeroCartao, @RequestBody ParcelaRequest parcelaRequest);
 
     @PostMapping("{numeroCartao}/renegociacoes")
-    ResponseEntity<SolicitacaoParcelamentoResponse> renegociacaoFatura
+    ResponseEntity<SolicitacaoAprovacaoResponse> renegociacaoFatura
             (@PathVariable String numeroCartao, @RequestBody RenegociacaoRequest renegociacaoRequest);
 
     @PostMapping("{numeroCartao}/vencimentos")
-    ResponseEntity<SolicitacaoParcelamentoResponse> avisaAlteracaoVencimento
+    ResponseEntity<SolicitacaoAprovacaoResponse> avisaAlteracaoVencimento
             (@PathVariable String numeroCartao, @RequestBody AlteraVencimentoRequest alteraVencimentoRequest);
 
 }
