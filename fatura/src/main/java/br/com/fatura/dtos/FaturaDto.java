@@ -17,7 +17,7 @@ public class FaturaDto {
 
     public FaturaDto(Fatura fatura) {
         this.email = fatura.getCartao().getEmail();
-        this.transacoes = fatura.toDtoSet();
+        this.transacoes = fatura.toDtoList();
         this.total = fatura.calculaEbuscaTotal();
     }
 

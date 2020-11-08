@@ -4,7 +4,9 @@ import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -22,10 +24,10 @@ public class Cartao {
     private String email;
 
     @OneToMany(mappedBy = "cartao", cascade = CascadeType.MERGE)
-    private Set<Fatura> faturas = new HashSet<>();
+    private List<Fatura> faturas = new ArrayList<>();
 
     @OneToMany(mappedBy = "cartao", cascade = CascadeType.MERGE)
-    private Set<Transacao> transacoes = new HashSet<>();
+    private List<Transacao> transacoes = new ArrayList<>();
 
     @Deprecated
     public Cartao(){}
@@ -59,19 +61,19 @@ public class Cartao {
         this.email = email;
     }
 
-    public Set<Fatura> getFaturas() {
+    public List<Fatura> getFaturas() {
         return faturas;
     }
 
-    public void setFaturas(Set<Fatura> faturas) {
+    public void setFaturas(List<Fatura> faturas) {
         this.faturas = faturas;
     }
 
-    public Set<Transacao> getTransacoes() {
+    public List<Transacao> getTransacoes() {
         return transacoes;
     }
 
-    public void setTransacoes(Set<Transacao> transacoes) {
+    public void setTransacoes(List<Transacao> transacoes) {
         this.transacoes = transacoes;
     }
 }

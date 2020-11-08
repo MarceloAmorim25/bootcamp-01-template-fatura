@@ -10,9 +10,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
-import javax.persistence.EntityManager;
-import javax.transaction.Transactional;
-import java.util.Optional;
 
 @Service
 public class ProcessaTransacaoService {
@@ -47,6 +44,8 @@ public class ProcessaTransacaoService {
         var fatura = faturaRepository.findByCartao(cartao);
 
         if(fatura.isPresent()){
+
+            logger.info("Fatura foi buscada com sucesso. Mês referente = {}", fatura.get().getMes());
             return fatura.get();
         }
 

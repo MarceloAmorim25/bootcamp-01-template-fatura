@@ -2,6 +2,8 @@ package br.com.fatura.entidades;
 
 import br.com.fatura.dtos.RecebeTransacao;
 import br.com.fatura.dtos.TransacaoDto;
+import br.com.fatura.entidades.enums.StatusAprovacao;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import org.hibernate.annotations.GenericGenerator;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -11,9 +13,7 @@ import java.time.Month;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 
@@ -26,7 +26,7 @@ public class Fatura {
     private String id;
 
     @OneToMany(mappedBy = "fatura", fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
-    private Set<Transacao> transacoes = new HashSet<>();
+    private List<Transacao> transacoes = new ArrayList<>();
 
     @ManyToOne
     private Cartao cartao;
@@ -35,7 +35,16 @@ public class Fatura {
     @Enumerated(value = EnumType.STRING)
     private Month mes;
 
+    @NotNull
+    private LocalDateTime geradaEm = LocalDateTime.now();
+
+    @NotNull
     private BigDecimal total = new BigDecimal(0);
+
+    @NotNull
+    private LocalDateTime vencimento;
+
+    private StatusAprovacao statusAlteracaoVencimento;
 
     @Deprecated
     public Fatura(){}
@@ -43,6 +52,17 @@ public class Fatura {
     public Fatura(Cartao cartao, RecebeTransacao recebeTransacao) {
         this.cartao = cartao;
         this.mes = defineMesDaFatura(recebeTransacao.getEfetivadaEm());
+        this.vencimento = vencimentoPadrao();
+    }
+
+    public LocalDateTime vencimentoPadrao(){
+        return geradaEm.withDayOfMonth(30);
+    }
+
+    public void alteraVencimento(String novoVencimento){
+
+        this.vencimento = this.vencimento.plusDays(Long.parseLong(novoVencimento));
+
     }
 
     public void adicionarTransacao(Transacao transacao){
@@ -54,13 +74,11 @@ public class Fatura {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss")
                 .withZone(ZoneId.of("UTC"));
 
-        LocalDateTime date = LocalDateTime.parse(efetivadaEm, formatter);
-
-        return date.getMonth();
+        return LocalDateTime.parse(efetivadaEm, formatter).getMonth();
 
     }
 
-    public List<TransacaoDto> toDtoSet(){
+    public List<TransacaoDto> toDtoList(){
 
         List<TransacaoDto> transacaoDtos = new ArrayList<>();
 
@@ -75,21 +93,41 @@ public class Fatura {
 
     public BigDecimal calculaEbuscaTotal(){
 
-        return toDtoSet().stream()
+        return toDtoList().stream()
                 .map(TransacaoDto::getValor)
                 .reduce(BigDecimal.valueOf(0), BigDecimal::add);
 
+    }
+
+    public StatusAprovacao getStatusAlteracaoVencimento() {
+        return statusAlteracaoVencimento;
+    }
+
+    public void setStatusAlteracaoVencimento(StatusAprovacao statusAlteracaoVencimento) {
+        this.statusAlteracaoVencimento = statusAlteracaoVencimento;
+    }
+
+    public LocalDateTime getGeradaEm() {
+        return geradaEm;
+    }
+
+    public void setGeradaEm(LocalDateTime geradaEm) {
+        this.geradaEm = geradaEm;
+    }
+
+    public LocalDateTime getVencimento() {
+        return vencimento;
+    }
+
+    public void setVencimento(LocalDateTime vencimento) {
+        this.vencimento = vencimento;
     }
 
     public BigDecimal getTotal() {
         return total;
     }
 
-    public void setTotal(BigDecimal total) {
-
-        this.total = total;
-
-    }
+    public void setTotal(BigDecimal total) { this.total = total; }
 
     public String getId() {
         return id;
@@ -99,11 +137,11 @@ public class Fatura {
         this.id = id;
     }
 
-    public Set<Transacao> getTransacoes() {
+    public List<Transacao> getTransacoes() {
         return transacoes;
     }
 
-    public void setTransacoes(Set<Transacao> transacoes) {
+    public void setTransacoes(List<Transacao> transacoes) {
         this.transacoes = transacoes;
     }
 
