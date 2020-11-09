@@ -32,11 +32,16 @@ public class CartaoResource {
     public ResponseEntity<?> consultaSaldo(@PathVariable String numeroCartao){
 
         /* @complexidade */
-        var cartao = cartaoRepository.findByNumero(numeroCartao).orElseThrow();
+        var cartao = cartaoRepository.findByNumero(numeroCartao);
+
+        /* @complexidade */
+        if(cartao.isEmpty()){
+            return ResponseEntity.notFound().build();
+        }
 
         /* @complexidade */
         var saldo =
-                cartao.calculaSaldo(integracaoApiCartoes);
+                cartao.get().calculaSaldo(integracaoApiCartoes);
 
         return ResponseEntity.ok(saldo);
 

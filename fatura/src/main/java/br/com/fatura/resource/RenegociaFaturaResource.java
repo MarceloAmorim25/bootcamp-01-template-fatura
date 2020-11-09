@@ -6,6 +6,7 @@ import br.com.fatura.repository.FaturaRepository;
 import br.com.fatura.repository.RenegociacaoRepository;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
@@ -44,21 +45,28 @@ public class RenegociaFaturaResource {
     @Transactional
     @PostMapping("renegociacoes/{numeroCartao}/{identificadorFatura}")
     public ResponseEntity<?> renegocia(@PathVariable String numeroCartao, @PathVariable String identificadorFatura,
-                                       @RequestBody RenegociacaoRequest renegociacaoRequest){
+                                       @RequestBody RenegociacaoRequest renegociacaoRequest, UriComponentsBuilder uriComponentsBuilder){
 
         /* @complexidade */
-        var fatura = faturaRepository.findById(identificadorFatura).orElseThrow();
+        var fatura = faturaRepository.findById(identificadorFatura);
+
+        /* @complexidade */
+        if(fatura.isEmpty()){
+            return ResponseEntity.notFound().build();
+        }
 
         /* @complexidade */
         var renegociacao =
-                renegociacaoRequest.toModel(fatura);
+                renegociacaoRequest.toModel(fatura.get());
 
         renegociacaoRepository.save(renegociacao);
 
         /* @complexidade */
         renegociacao.avisaLegadoAtualizaStatus(integracaoApiCartoes,numeroCartao, renegociacaoRequest, entityManager);
 
-        return ResponseEntity.ok().build();
+        return ResponseEntity.created(uriComponentsBuilder
+                .buildAndExpand("/api/faturas/renegociacoes/{numeroCartao}/{identificadorFatura}", numeroCartao, identificadorFatura)
+                .toUri()).body(renegociacao);
 
     }
 

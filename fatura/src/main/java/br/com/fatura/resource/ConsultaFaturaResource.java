@@ -44,11 +44,15 @@ public class ConsultaFaturaResource {
 
         /* @complexidade */
         var cartao =
-                cartaoRepository.findByNumero(numeroCartao).orElseThrow();
+                cartaoRepository.findByNumero(numeroCartao);
+
+        if(cartao.isEmpty()){
+            return ResponseEntity.notFound().build();
+        }
 
         /* @complexidade */
         var fatura =
-                faturaRepository.findByCartao(cartao).orElseThrow();
+                faturaRepository.findByCartao(cartao.get()).orElseThrow();
 
                                     /* @complexidade */
         return ResponseEntity.ok(new FaturaDto(fatura));
@@ -61,10 +65,15 @@ public class ConsultaFaturaResource {
 
         /* @complexidade */
         var cartao =
-                cartaoRepository.findByNumero(numeroCartao).orElseThrow();
+                cartaoRepository.findByNumero(numeroCartao);
 
         /* @complexidade */
-        var fatura = cartao.buscaFaturasPorPeriodo(mes, ano);
+        if(cartao.isEmpty()){
+            return ResponseEntity.notFound().build();
+        }
+
+        /* @complexidade */
+        var fatura = cartao.get().buscaFaturasPorPeriodo(mes, ano);
 
         return ResponseEntity.ok(fatura);
 

@@ -42,10 +42,15 @@ public class AlteraVencimentoFaturaResource {
 
         /* @complexidade */
         var fatura =
-                faturaRepository.findById(identificadorFatura).orElseThrow();
+                faturaRepository.findById(identificadorFatura);
 
         /* @complexidade */
-        fatura.avisaLegadoAtualizaVencimento(alteraVencimentoRequest, integracaoApiCartoes, numeroCartao, entityManager);
+        if(fatura.isEmpty()){
+            return ResponseEntity.notFound().build();
+        }
+
+        /* @complexidade */
+        fatura.get().avisaLegadoAtualizaVencimento(alteraVencimentoRequest, integracaoApiCartoes, numeroCartao, entityManager);
 
         return ResponseEntity.ok().build();
 

@@ -6,6 +6,7 @@ import br.com.fatura.repository.FaturaRepository;
 import br.com.fatura.repository.ParcelaRepository;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
@@ -43,24 +44,27 @@ public class ParcelaFaturaResource {
     @Transactional
     @PostMapping("parcelas/{numeroCartao}/{identificadorFatura}")
     public ResponseEntity<?> parcela(@PathVariable String numeroCartao, @PathVariable String identificadorFatura,
-                                     @RequestBody ParcelaRequest parcelaRequest){
+                                     @RequestBody ParcelaRequest parcelaRequest, UriComponentsBuilder uriComponentsBuilder){
 
         /* @complexidade */
-        var fatura =
-                faturaRepository.findById(identificadorFatura).orElseThrow();
-
-        System.out.println("programa passou por aqui");
+        var fatura = faturaRepository.findById(identificadorFatura);
 
         /* @complexidade */
-        var parcela = parcelaRequest.toModel(fatura);
+        if(fatura.isEmpty()){
+            return ResponseEntity.notFound().build();
+        }
+
+        /* @complexidade */
+        var parcela = parcelaRequest.toModel(fatura.get());
 
         parcelaRepository.save(parcela);
 
         /* @complexidade */
         parcela.avisaLegadoEAtualizaStatus(integracaoApiCartoes, numeroCartao, parcelaRequest, entityManager);
 
-        return ResponseEntity.ok().build();
+        return ResponseEntity.created(uriComponentsBuilder
+                        .buildAndExpand("/api/faturas/parcelas/{numeroCartao}/{identificadorFatura}", numeroCartao, identificadorFatura)
+                        .toUri()).body(parcela);
 
     }
-
 }
