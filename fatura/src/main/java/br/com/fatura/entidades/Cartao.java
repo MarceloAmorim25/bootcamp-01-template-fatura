@@ -1,11 +1,15 @@
 package br.com.fatura.entidades;
 
 import br.com.fatura.dtos.FaturaDto;
+import br.com.fatura.integracoes.IntegracaoApiCartoes;
 import org.hibernate.annotations.GenericGenerator;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 
 @Entity
@@ -45,6 +49,22 @@ public class Cartao {
                     .orElseThrow();
 
         return new FaturaDto(fatura);
+
+    }
+
+    public BigDecimal calculaSaldo(IntegracaoApiCartoes integracaoApiCartoes){
+
+        var limite =
+                Objects.requireNonNull(integracaoApiCartoes.buscarLimiteCartao(this.numero).getBody()).getLimite();
+
+        var fatura =
+                this.faturas
+                        .stream()
+                        .filter(f -> f.getMes() == LocalDateTime.now().getMonth())
+                        .findAny()
+                        .orElseThrow();
+
+        return limite.subtract(fatura.calculaEbuscaTotal());
 
     }
 

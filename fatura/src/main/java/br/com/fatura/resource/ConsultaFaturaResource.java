@@ -21,6 +21,9 @@ import javax.transaction.Transactional;
 public class ConsultaFaturaResource {
 
 
+    /* pontos de dificuldade de entendimento -> 6 pontos */
+
+
     /* @complexidade */
     private final FaturaRepository faturaRepository;
 

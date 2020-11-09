@@ -12,42 +12,32 @@ import java.util.Objects;
 @RequestMapping("/api/cartoes")
 public class CartaoResource {
 
+    /* pontos de dificuldade de entendimento -> 4 pontos */
 
+    /* @complexidade */
     private final CartaoRepository cartaoRepository;
 
-    private final FaturaRepository faturaRepository;
-
+    /* @complexidade */
     private final IntegracaoApiCartoes integracaoApiCartoes;
 
 
     public CartaoResource(CartaoRepository cartaoRepository,
-                          IntegracaoApiCartoes integracaoApiCartoes, FaturaRepository faturaRepository) {
+                          IntegracaoApiCartoes integracaoApiCartoes) {
         this.cartaoRepository = cartaoRepository;
         this.integracaoApiCartoes = integracaoApiCartoes;
-        this.faturaRepository = faturaRepository;
     }
 
 
     @GetMapping("/{numeroCartao}")
     public ResponseEntity<?> consultaSaldo(@PathVariable String numeroCartao){
 
-        var cartao = cartaoRepository.findByNumero(numeroCartao);
+        /* @complexidade */
+        var cartao = cartaoRepository.findByNumero(numeroCartao).orElseThrow();
 
-        if(cartao.isPresent()){
+        /* @complexidade */
+        var saldo = cartao.calculaSaldo(integracaoApiCartoes);
 
-            var limite =
-                    Objects.requireNonNull(integracaoApiCartoes.buscarLimiteCartao(numeroCartao).getBody()).getLimite();
-
-            var fatura =
-                    faturaRepository.findByCartao(cartao.get()).orElseThrow();
-
-            var saldo = limite.subtract(fatura.calculaEbuscaTotal());
-
-            return ResponseEntity.ok(saldo);
-
-        }
-
-        return ResponseEntity.notFound().build();
+        return ResponseEntity.ok(saldo);
 
     }
 }

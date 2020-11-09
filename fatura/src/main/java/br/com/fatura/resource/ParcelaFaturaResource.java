@@ -8,11 +8,17 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
 
+@RequestMapping("/api/faturas")
 public class ParcelaFaturaResource {
+
+
+    /* pontos de dificuldade de entendimento -> 6 pontos */
+
 
     /* @complexidade */
     private final FaturaRepository faturaRepository;
@@ -45,8 +51,7 @@ public class ParcelaFaturaResource {
         var fatura = faturaRepository.findById(identificadorFatura).orElseThrow();
 
         /* @complexidade */
-        var parcela =
-                parcelaRequest.toModel(fatura);
+        var parcela = parcelaRequest.toModel(fatura);
 
         parcelaRepository.save(parcela);
 

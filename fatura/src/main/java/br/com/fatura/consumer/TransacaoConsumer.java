@@ -20,13 +20,18 @@ import java.util.Optional;
 @Component
 public class TransacaoConsumer {
 
+    /* pontos de dificuldade de entendimento -> 7 pontos */
 
+    /* @complexidade */
     private final FaturaRepository faturaRepository;
 
+    /* @complexidade */
     private final CartaoRepository cartaoRepository;
 
+    /* @complexidade */
     private final TransacaoRepository transacaoRepository;
 
+    /* @complexidade */
     private final ProcessaTransacaoService processaTransacaoService;
 
     private final Logger logger = LoggerFactory.getLogger(Fatura.class);
@@ -47,12 +52,15 @@ public class TransacaoConsumer {
     @KafkaListener(topics="${spring.kafka.topic.transactions}")
     public void consume(RecebeTransacao transacaoRecebida)  {
 
+        /* @complexidade */
+        var cartao = processaTransacaoService
+                .buscaCartao(transacaoRecebida, cartaoRepository);
 
-        var cartao = processaTransacaoService.buscaCartao(transacaoRecebida, cartaoRepository);
-
+        /* @complexidade */
         var fatura = processaTransacaoService
                 .buscaFatura(transacaoRecebida, cartao, faturaRepository);
 
+        /* @complexidade */
         processaTransacaoService
                 .registraTransacao(transacaoRecebida, cartaoRepository, transacaoRepository, fatura);
 

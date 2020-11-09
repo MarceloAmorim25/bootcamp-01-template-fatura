@@ -7,17 +7,26 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
 
+
+@RequestMapping("/api/faturas")
 public class AlteraVencimentoFaturaResource {
 
 
+    /* pontos de dificuldade de entendimento -> 5 pontos */
+
+
+    /* @complexidade */
     private final FaturaRepository faturaRepository;
 
+    /* @complexidade */
     private final IntegracaoApiCartoes integracaoApiCartoes;
 
+    /* @complexidade */
     private final EntityManager entityManager;
 
 

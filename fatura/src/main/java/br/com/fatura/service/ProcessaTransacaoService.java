@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class ProcessaTransacaoService {
 
+    /* pontos de dificuldade de entendimento -> 8 pontos */
 
     private final Logger logger = LoggerFactory.getLogger(Fatura.class);
 
@@ -23,12 +24,15 @@ public class ProcessaTransacaoService {
         String numeroCartao = transacaoRecebida.getCartao().getId();
         String emailCartao = transacaoRecebida.getCartao().getEmail();
 
+        /* @complexidade */
         var cartao = cartaoRepository.findByNumero(numeroCartao);
 
+        /* @complexidade */
         if(cartao.isPresent()){
             return cartao.orElseThrow();
         }
 
+        /* @complexidade */
         var novoCartao = new Cartao(numeroCartao, emailCartao);
 
         cartaoRepository.save(novoCartao);
@@ -41,12 +45,15 @@ public class ProcessaTransacaoService {
     public Fatura buscaFatura(RecebeTransacao transacaoRecebida, Cartao cartao,
                             FaturaRepository faturaRepository){
 
+        /* @complexidade */
         var fatura = faturaRepository.findByCartao(cartao);
 
+        /* @complexidade */
         if(fatura.isPresent()){
             return fatura.get();
         }
 
+        /* @complexidade */
         var novaFatura = new Fatura(cartao, transacaoRecebida);
 
         faturaRepository.save(novaFatura);
@@ -60,9 +67,11 @@ public class ProcessaTransacaoService {
     public void registraTransacao(RecebeTransacao transacaoRecebida, CartaoRepository cartaoRepository,
                                   TransacaoRepository transacaoRepository, Fatura fatura){
 
+        /* @complexidade */
         var novaTransacao = transacaoRecebida.toModel(cartaoRepository, fatura);
         transacaoRepository.save(novaTransacao);
 
+        /* @complexidade */
         fatura.adicionarTransacao(novaTransacao);
 
         logger.info("transação no valor de {} foi registrada", novaTransacao.getValor());
