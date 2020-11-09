@@ -12,12 +12,12 @@ import java.util.Objects;
 @RequestMapping("/api/cartoes")
 public class CartaoResource {
 
-    /* pontos de dificuldade de entendimento -> 4 pontos */
+    /* pontos de dificuldade de entendimento -> 5 pontos */
 
-    /* @complexidade */
+    /* @complexidade - acoplamento contextual */
     private final CartaoRepository cartaoRepository;
 
-    /* @complexidade */
+    /* @complexidade - acoplamento contextual */
     private final IntegracaoApiCartoes integracaoApiCartoes;
 
 

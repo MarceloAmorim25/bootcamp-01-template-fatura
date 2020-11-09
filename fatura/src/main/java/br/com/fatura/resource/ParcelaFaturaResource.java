@@ -16,16 +16,16 @@ import javax.transaction.Transactional;
 public class ParcelaFaturaResource {
 
 
-    /* pontos de dificuldade de entendimento -> 6 pontos */
+    /* pontos de dificuldade de entendimento -> 8 pontos */
 
 
-    /* @complexidade */
+    /* @complexidade - acoplamento contextual */
     private final FaturaRepository faturaRepository;
 
-    /* @complexidade */
+    /* @complexidade - acoplamento contextual */
     private final IntegracaoApiCartoes integracaoApiCartoes;
 
-    /* @complexidade */
+    /* @complexidade - acoplamento contextual */
     private final ParcelaRepository parcelaRepository;
 
     private final EntityManager entityManager;
@@ -57,6 +57,7 @@ public class ParcelaFaturaResource {
         /* @complexidade */
         var parcela = parcelaRequest.toModel(fatura.get());
 
+        /* @complexidade */
         parcelaRepository.save(parcela);
 
         /* @complexidade */

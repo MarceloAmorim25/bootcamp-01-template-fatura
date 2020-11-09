@@ -14,16 +14,16 @@ import javax.transaction.Transactional;
 public class AlteraVencimentoFaturaResource {
 
 
-    /* pontos de dificuldade de entendimento -> 5 pontos */
+    /* pontos de dificuldade de entendimento -> 6 pontos */
 
 
-    /* @complexidade */
+    /* @complexidade - acoplamento contextual */
     private final FaturaRepository faturaRepository;
 
-    /* @complexidade */
+    /* @complexidade - acoplamento contextual */
     private final IntegracaoApiCartoes integracaoApiCartoes;
 
-    /* @complexidade */
+    /* @complexidade - acoplamento contextual */
     private final EntityManager entityManager;
 
 

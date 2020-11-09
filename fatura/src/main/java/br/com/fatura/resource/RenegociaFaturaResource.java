@@ -17,7 +17,7 @@ import javax.transaction.Transactional;
 public class RenegociaFaturaResource {
 
 
-    /* pontos de dificuldade de entendimento -> 6 pontos */
+    /* pontos de dificuldade de entendimento -> 8 pontos */
 
 
     /* @complexidade */
@@ -59,6 +59,7 @@ public class RenegociaFaturaResource {
         var renegociacao =
                 renegociacaoRequest.toModel(fatura.get());
 
+        /* @complexidade */
         renegociacaoRepository.save(renegociacao);
 
         /* @complexidade */

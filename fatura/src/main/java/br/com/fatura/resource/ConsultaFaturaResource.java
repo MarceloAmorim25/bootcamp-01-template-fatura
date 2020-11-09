@@ -21,13 +21,13 @@ import javax.transaction.Transactional;
 public class ConsultaFaturaResource {
 
 
-    /* pontos de dificuldade de entendimento -> 6 pontos */
+    /* pontos de dificuldade de entendimento -> 8 pontos */
 
 
-    /* @complexidade */
+    /* @complexidade - acoplamento contextual */
     private final FaturaRepository faturaRepository;
 
-    /* @complexidade */
+    /* @complexidade - acoplamento contextual */
     private final CartaoRepository cartaoRepository;
 
 
@@ -46,6 +46,7 @@ public class ConsultaFaturaResource {
         var cartao =
                 cartaoRepository.findByNumero(numeroCartao);
 
+        /* @complexidade */
         if(cartao.isEmpty()){
             return ResponseEntity.notFound().build();
         }

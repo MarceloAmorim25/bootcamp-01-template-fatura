@@ -14,10 +14,15 @@ import org.springframework.web.util.UriComponentsBuilder;
 @RestController
 public class CartaoVirtualResource {
 
+    /* pontos de dificuldade de entendimento -> 7 pontos */
+
+    /* @complexidade - acoplamento contextual */
     private final CartaoVirtualRepository cartaoVirtualRepository;
 
+    /* @complexidade - acoplamento contextual */
     private final CartaoRepository cartaoRepository;
 
+    /* @complexidade - acoplamento contextual */
     private final IntegracaoApiCartoes integracaoApiCartoes;
 
     public CartaoVirtualResource(CartaoVirtualRepository cartaoVirtualRepository, CartaoRepository cartaoRepository,
@@ -27,14 +32,17 @@ public class CartaoVirtualResource {
         this.integracaoApiCartoes = integracaoApiCartoes;
     }
 
-    @PostMapping("/api/cartoes-virtuais/{numeroCartao}")
+    @PostMapping("/api/cartoes-virtuais/{numeroCartao}")     /* @complexidade */
     public ResponseEntity<?> gera(@RequestBody CartaoVirtualRequest cartaoVirtualRequest, @PathVariable
                                   String numeroCartao, UriComponentsBuilder uriComponentsBuilder){
 
+        /* @complexidade */
         var cartao = cartaoVirtualRequest.toModel(cartaoRepository);
 
+        /* @complexidade */
         cartao.defineLimite(integracaoApiCartoes);
 
+        /* @complexidade */
         cartaoVirtualRepository.save(cartao);
 
         return ResponseEntity.created(uriComponentsBuilder
