@@ -6,7 +6,6 @@ import org.hibernate.annotations.GenericGenerator;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -57,14 +56,7 @@ public class Cartao {
         var limite =
                 Objects.requireNonNull(integracaoApiCartoes.buscarLimiteCartao(this.numero).getBody()).getLimite();
 
-        var fatura =
-                this.faturas
-                        .stream()
-                        .filter(f -> f.getMes() == LocalDateTime.now().getMonth())
-                        .findAny()
-                        .orElseThrow();
-
-        return limite.subtract(fatura.calculaEbuscaTotal());
+        return limite.subtract(this.faturas.get(0).calculaEbuscaTotal());
 
     }
 

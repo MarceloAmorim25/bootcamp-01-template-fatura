@@ -5,7 +5,6 @@ import br.com.fatura.dtos.RecebeTransacao;
 import br.com.fatura.dtos.TransacaoDto;
 import br.com.fatura.entidades.enums.StatusAprovacao;
 import br.com.fatura.integracoes.IntegracaoApiCartoes;
-import com.fasterxml.jackson.annotation.JsonFormat;
 import org.hibernate.annotations.GenericGenerator;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;

@@ -35,7 +35,8 @@ public class CartaoResource {
         var cartao = cartaoRepository.findByNumero(numeroCartao).orElseThrow();
 
         /* @complexidade */
-        var saldo = cartao.calculaSaldo(integracaoApiCartoes);
+        var saldo =
+                cartao.calculaSaldo(integracaoApiCartoes);
 
         return ResponseEntity.ok(saldo);
 

@@ -4,15 +4,12 @@ import br.com.fatura.dtos.AlteraVencimentoRequest;
 import br.com.fatura.integracoes.IntegracaoApiCartoes;
 import br.com.fatura.repository.FaturaRepository;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-
+import org.springframework.web.bind.annotation.*;
 import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
 
 
+@RestController
 @RequestMapping("/api/faturas")
 public class AlteraVencimentoFaturaResource {
 
@@ -37,6 +34,7 @@ public class AlteraVencimentoFaturaResource {
         this.entityManager = entityManager;
     }
 
+
     @Transactional
     @PutMapping("/{numeroCartao}/vencimentos/{identificadorFatura}")
     public ResponseEntity<?> alteraVencimento(@PathVariable String numeroCartao, @PathVariable String identificadorFatura,
@@ -52,6 +50,4 @@ public class AlteraVencimentoFaturaResource {
         return ResponseEntity.ok().build();
 
     }
-
-
 }

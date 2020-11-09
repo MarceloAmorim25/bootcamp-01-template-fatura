@@ -5,15 +5,13 @@ import br.com.fatura.integracoes.IntegracaoApiCartoes;
 import br.com.fatura.repository.FaturaRepository;
 import br.com.fatura.repository.ParcelaRepository;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
 
-@RequestMapping("/api/faturas")
+@RestController
+@RequestMapping("/api/faturas/")
 public class ParcelaFaturaResource {
 
 
@@ -43,12 +41,15 @@ public class ParcelaFaturaResource {
     }
 
     @Transactional
-    @PostMapping("/{numeroCartao}/parcelas/{identificadorFatura}")
+    @PostMapping("parcelas/{numeroCartao}/{identificadorFatura}")
     public ResponseEntity<?> parcela(@PathVariable String numeroCartao, @PathVariable String identificadorFatura,
                                      @RequestBody ParcelaRequest parcelaRequest){
 
         /* @complexidade */
-        var fatura = faturaRepository.findById(identificadorFatura).orElseThrow();
+        var fatura =
+                faturaRepository.findById(identificadorFatura).orElseThrow();
+
+        System.out.println("programa passou por aqui");
 
         /* @complexidade */
         var parcela = parcelaRequest.toModel(fatura);

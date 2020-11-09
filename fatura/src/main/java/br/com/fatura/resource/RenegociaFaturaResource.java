@@ -10,7 +10,9 @@ import org.springframework.web.bind.annotation.*;
 import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
 
-@RequestMapping("/api/faturas")
+
+@RestController
+@RequestMapping("/api/faturas/")
 public class RenegociaFaturaResource {
 
 
@@ -40,7 +42,7 @@ public class RenegociaFaturaResource {
     }
 
     @Transactional
-    @PostMapping("/{numeroCartao}/renegociacoes/{identificadorFatura}")
+    @PostMapping("renegociacoes/{numeroCartao}/{identificadorFatura}")
     public ResponseEntity<?> renegocia(@PathVariable String numeroCartao, @PathVariable String identificadorFatura,
                                        @RequestBody RenegociacaoRequest renegociacaoRequest){
 

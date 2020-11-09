@@ -64,11 +64,11 @@ public class ProcessaTransacaoService {
 
     }
 
-    public void registraTransacao(RecebeTransacao transacaoRecebida, CartaoRepository cartaoRepository,
+    public void registraTransacao(RecebeTransacao transacaoRecebida, Cartao cartao,
                                   TransacaoRepository transacaoRepository, Fatura fatura){
 
         /* @complexidade */
-        var novaTransacao = transacaoRecebida.toModel(cartaoRepository, fatura);
+        var novaTransacao = transacaoRecebida.toModel(cartao, fatura);
         transacaoRepository.save(novaTransacao);
 
         /* @complexidade */

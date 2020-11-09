@@ -37,12 +37,12 @@ public class Transacao {
     @Deprecated
     public Transacao(){}
 
-    public Transacao(String id, BigDecimal valor, String efetivadaEm, CartaoDto cartao,
-                     Estabelecimento estabelecimento, CartaoRepository cartaoRepository, Fatura fatura) {
+    public Transacao(String id, BigDecimal valor, String efetivadaEm, Cartao cartao,
+                     Estabelecimento estabelecimento, Fatura fatura) {
         this.id = id;
         this.valor = valor;
         this.efetivadaEm = converteParaLocalDateTime(efetivadaEm);
-        this.cartao = salvarCartao(cartao, cartaoRepository);
+        this.cartao = cartao;
         this.estabelecimento = estabelecimento;
         this.fatura = fatura;
     }
@@ -53,18 +53,7 @@ public class Transacao {
                 .ofPattern("yyyy-MM-dd'T'HH:mm:ss")
                 .withZone(ZoneId.of("UTC"));
 
-        LocalDateTime date = LocalDateTime.parse(efetivadaEm, formatter);
-        return date;
-
-    }
-
-    public Cartao salvarCartao(CartaoDto cartao, CartaoRepository cartaoRepository){
-
-        if (cartaoRepository.findByNumero(cartao.getId()).isEmpty()) {
-            cartaoRepository.save(cartao.toModel());
-        }
-
-        return cartaoRepository.findByNumero(cartao.getId()).orElseThrow();
+        return LocalDateTime.parse(efetivadaEm, formatter);
 
     }
 

@@ -62,7 +62,7 @@ public class TransacaoConsumer {
 
         /* @complexidade */
         processaTransacaoService
-                .registraTransacao(transacaoRecebida, cartaoRepository, transacaoRepository, fatura);
+                .registraTransacao(transacaoRecebida, cartao, transacaoRepository, fatura);
 
         logger.info("[TRANSACAO] transação de valor = {} realizada por = {} no estabelecimento = {} ",
                 transacaoRecebida.getValor(),transacaoRecebida.getCartao().getEmail(), transacaoRecebida.getEstabelecimento().getNome());

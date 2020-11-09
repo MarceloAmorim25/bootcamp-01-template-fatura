@@ -1,5 +1,6 @@
 package br.com.fatura.dtos;
 
+import br.com.fatura.entidades.Cartao;
 import br.com.fatura.entidades.Estabelecimento;
 import br.com.fatura.entidades.Fatura;
 import br.com.fatura.entidades.Transacao;
@@ -41,8 +42,8 @@ public class RecebeTransacao {
         this.estabelecimento = estabelecimento;
     }
 
-    public Transacao toModel(CartaoRepository cartaoRepository, Fatura fatura){
-        return new Transacao(id, valor, efetivadaEm, cartao, estabelecimento, cartaoRepository, fatura);
+    public Transacao toModel(Cartao cartaoRecebido, Fatura fatura){
+        return new Transacao(id, valor, efetivadaEm, cartaoRecebido, estabelecimento, fatura);
     }
 
 
