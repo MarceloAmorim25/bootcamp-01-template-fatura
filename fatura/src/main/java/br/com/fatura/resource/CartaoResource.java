@@ -33,10 +33,10 @@ public class CartaoResource {
 
         var cartao = cartaoRepository.findByNumero(numeroCartao);
 
-        var limite =
-                Objects.requireNonNull(integracaoApiCartoes.buscarLimiteCartao(numeroCartao).getBody()).getLimite();
-
         if(cartao.isPresent()){
+
+            var limite =
+                    Objects.requireNonNull(integracaoApiCartoes.buscarLimiteCartao(numeroCartao).getBody()).getLimite();
 
             var fatura =
                     faturaRepository.findByCartao(cartao.get()).orElseThrow();
