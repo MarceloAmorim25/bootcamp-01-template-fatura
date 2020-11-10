@@ -63,51 +63,13 @@ public class Cartao {
 
     }
 
-    public List<CartaoVirtual> getCartoesVirtuais() {
-        return cartoesVirtuais;
-    }
-
-    public void setCartoesVirtuais(List<CartaoVirtual> cartoesVirtuais) {
-        this.cartoesVirtuais = cartoesVirtuais;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
 
     public String getNumero() {
         return numero;
-    }
-
-    public void setNumero(String numero) {
-        this.numero = numero;
     }
 
     public String getEmail() {
         return email;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public List<Fatura> getFaturas() {
-        return faturas;
-    }
-
-    public void setFaturas(List<Fatura> faturas) {
-        this.faturas = faturas;
-    }
-
-    public List<Transacao> getTransacoes() {
-        return transacoes;
-    }
-
-    public void setTransacoes(List<Transacao> transacoes) {
-        this.transacoes = transacoes;
-    }
 }

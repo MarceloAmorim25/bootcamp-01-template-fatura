@@ -58,22 +58,6 @@ public class CartaoVirtual {
 
     }
 
-    public BigDecimal getLimite() {
-        return limite;
-    }
-
-    public void setLimite(BigDecimal limite) {
-        this.limite = limite;
-    }
-
-    public String getNumero() {
-        return numero;
-    }
-
-    public void setNumero(String numero) {
-        this.numero = numero;
-    }
-
     public Cartao getCartao() {
         return cartao;
     }

@@ -52,6 +52,7 @@ public class Fatura {
     @NotNull
     private LocalDateTime vencimento;
 
+    @Enumerated(EnumType.STRING)
     private StatusAprovacao statusAlteracaoVencimento;
 
     @Deprecated
@@ -122,66 +123,13 @@ public class Fatura {
 
     }
 
-    public StatusAprovacao getStatusAlteracaoVencimento() {
-        return statusAlteracaoVencimento;
-    }
 
     public void setStatusAlteracaoVencimento(StatusAprovacao statusAlteracaoVencimento) {
         this.statusAlteracaoVencimento = statusAlteracaoVencimento;
     }
 
-    public List<Parcela> getParcelas() {
-        return parcelas;
-    }
-
-    public void setParcelas(List<Parcela> parcelas) {
-        this.parcelas = parcelas;
-    }
-
-    public List<Renegociacao> getRenegociacoes() {
-        return renegociacoes;
-    }
-
-    public void setRenegociacoes(List<Renegociacao> renegociacoes) {
-        this.renegociacoes = renegociacoes;
-    }
-
     public LocalDateTime getGeradaEm() {
         return geradaEm;
-    }
-
-    public void setGeradaEm(LocalDateTime geradaEm) {
-        this.geradaEm = geradaEm;
-    }
-
-    public LocalDateTime getVencimento() {
-        return vencimento;
-    }
-
-    public void setVencimento(LocalDateTime vencimento) {
-        this.vencimento = vencimento;
-    }
-
-    public BigDecimal getTotal() {
-        return total;
-    }
-
-    public void setTotal(BigDecimal total) { this.total = total; }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public List<Transacao> getTransacoes() {
-        return transacoes;
-    }
-
-    public void setTransacoes(List<Transacao> transacoes) {
-        this.transacoes = transacoes;
     }
 
     public Cartao getCartao() {
@@ -196,7 +144,4 @@ public class Fatura {
         return mes;
     }
 
-    public void setMes(Month mes) {
-        this.mes = mes;
-    }
 }

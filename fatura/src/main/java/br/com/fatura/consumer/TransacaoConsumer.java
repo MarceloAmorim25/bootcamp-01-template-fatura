@@ -1,9 +1,7 @@
 package br.com.fatura.consumer;
 
 import br.com.fatura.dtos.RecebeTransacao;
-import br.com.fatura.entidades.Cartao;
 import br.com.fatura.entidades.Fatura;
-import br.com.fatura.entidades.Transacao;
 import br.com.fatura.repository.CartaoRepository;
 import br.com.fatura.repository.FaturaRepository;
 import br.com.fatura.repository.TransacaoRepository;
@@ -12,9 +10,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
-import javax.persistence.EntityManager;
-import javax.transaction.Transactional;
-import java.util.Optional;
 
 
 @Component

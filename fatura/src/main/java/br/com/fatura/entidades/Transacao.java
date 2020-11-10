@@ -1,10 +1,5 @@
 package br.com.fatura.entidades;
-import br.com.fatura.dtos.CartaoDto;
-import br.com.fatura.repository.CartaoRepository;
-import br.com.fatura.repository.FaturaRepository;
 import com.sun.istack.NotNull;
-import org.hibernate.annotations.GenericGenerator;
-
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -57,28 +52,12 @@ public class Transacao {
 
     }
 
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
     public BigDecimal getValor() {
         return valor;
     }
 
-    public void setValor(BigDecimal valor) {
-        this.valor = valor;
-    }
-
     public LocalDateTime getEfetivadaEm() {
         return efetivadaEm;
-    }
-
-    public void setEfetivadaEm(LocalDateTime efetivadaEm) {
-        this.efetivadaEm = efetivadaEm;
     }
 
     public Cartao getCartao() {
@@ -101,7 +80,5 @@ public class Transacao {
         return estabelecimento;
     }
 
-    public void setEstabelecimento(Estabelecimento estabelecimento) {
-        this.estabelecimento = estabelecimento;
-    }
+
 }

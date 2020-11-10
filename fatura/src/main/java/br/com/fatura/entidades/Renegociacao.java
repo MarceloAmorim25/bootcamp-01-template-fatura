@@ -67,35 +67,8 @@ public class Renegociacao {
         this.fatura = fatura;
     }
 
-    public StatusAprovacao getStatus() {
-        return status;
-    }
-
     public void setStatus(StatusAprovacao status) {
         this.status = status;
     }
 
-    public String getIdentificadorDaFatura() {
-        return identificadorDaFatura;
-    }
-
-    public void setIdentificadorDaFatura(String identificadorDaFatura) {
-        this.identificadorDaFatura = identificadorDaFatura;
-    }
-
-    public Integer getQuantidade() {
-        return quantidade;
-    }
-
-    public void setQuantidade(Integer quantidade) {
-        this.quantidade = quantidade;
-    }
-
-    public BigDecimal getValor() {
-        return valor;
-    }
-
-    public void setValor(BigDecimal valor) {
-        this.valor = valor;
-    }
 }
