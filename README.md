@@ -1,3 +1,5 @@
-# Por favor faça um Fork desse projeto!
+## Vault
 
-## Está em dúvida de como fazer um Fork? Não tem problema! [Aqui tem uma explicação do que entendemos que você deve considerar!](https://docs.github.com/en/github/getting-started-with-github/fork-a-repo)
+- Referência para configurar o Vault na API (bootstrap.yml).
+
+- https://spring.io/blog/2016/06/24/managing-secrets-with-vault

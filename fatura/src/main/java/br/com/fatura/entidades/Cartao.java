@@ -31,6 +31,9 @@ public class Cartao {
     @OneToMany(mappedBy = "cartao", cascade = CascadeType.MERGE)
     private List<Transacao> transacoes = new ArrayList<>();
 
+    @OneToMany(mappedBy = "cartao", cascade = CascadeType.MERGE)
+    private List<CartaoVirtual> cartoesVirtuais = new ArrayList<>();
+
     @Deprecated
     public Cartao(){}
 
@@ -58,6 +61,14 @@ public class Cartao {
 
         return limite.subtract(this.faturas.get(0).calculaEbuscaTotal());
 
+    }
+
+    public List<CartaoVirtual> getCartoesVirtuais() {
+        return cartoesVirtuais;
+    }
+
+    public void setCartoesVirtuais(List<CartaoVirtual> cartoesVirtuais) {
+        this.cartoesVirtuais = cartoesVirtuais;
     }
 
     public String getId() {
