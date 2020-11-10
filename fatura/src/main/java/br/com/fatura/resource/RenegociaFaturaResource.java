@@ -1,9 +1,13 @@
 package br.com.fatura.resource;
 
 import br.com.fatura.dtos.RenegociacaoRequest;
+import br.com.fatura.entidades.Parcela;
+import br.com.fatura.entidades.Renegociacao;
 import br.com.fatura.integracoes.IntegracaoApiCartoes;
 import br.com.fatura.repository.FaturaRepository;
 import br.com.fatura.repository.RenegociacaoRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -31,6 +35,8 @@ public class RenegociaFaturaResource {
 
     private final EntityManager entityManager;
 
+    private final Logger logger = LoggerFactory.getLogger(Renegociacao.class);
+
 
     public RenegociaFaturaResource(FaturaRepository faturaRepository, RenegociacaoRepository renegociacaoRepository,
                                    IntegracaoApiCartoes integracaoApiCartoes, EntityManager entityManager) {
@@ -52,23 +58,24 @@ public class RenegociaFaturaResource {
 
         /* @complexidade */
         if(fatura.isEmpty()){
+            logger.info("[INFO] Fatura não encontrada pelo identificador");
             return ResponseEntity.notFound().build();
         }
 
         /* @complexidade */
-        var renegociacao =
-                renegociacaoRequest.toModel(fatura.get());
+        var renegociacao = renegociacaoRequest.toModel(fatura.get());
 
         /* @complexidade */
         renegociacaoRepository.save(renegociacao);
 
         /* @complexidade */
-        renegociacao.avisaLegadoAtualizaStatus(integracaoApiCartoes,numeroCartao, renegociacaoRequest, entityManager);
+        renegociacao.avisaLegadoAtualizaStatus(integracaoApiCartoes, numeroCartao, renegociacaoRequest, entityManager);
+
+        logger.info("[INFO] Solicitação de renegociação registrada");
 
         return ResponseEntity.created(uriComponentsBuilder
                 .buildAndExpand("/api/faturas/renegociacoes/{numeroCartao}/{identificadorFatura}", numeroCartao, identificadorFatura)
                 .toUri()).body(renegociacao);
 
     }
-
 }

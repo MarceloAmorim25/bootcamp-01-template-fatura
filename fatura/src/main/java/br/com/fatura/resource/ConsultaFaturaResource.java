@@ -4,11 +4,15 @@ import br.com.fatura.dtos.AlteraVencimentoRequest;
 import br.com.fatura.dtos.FaturaDto;
 import br.com.fatura.dtos.ParcelaRequest;
 import br.com.fatura.dtos.RenegociacaoRequest;
+import br.com.fatura.entidades.CartaoVirtual;
+import br.com.fatura.entidades.Fatura;
 import br.com.fatura.integracoes.IntegracaoApiCartoes;
 import br.com.fatura.repository.CartaoRepository;
 import br.com.fatura.repository.FaturaRepository;
 import br.com.fatura.repository.ParcelaRepository;
 import br.com.fatura.repository.RenegociacaoRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import javax.persistence.EntityManager;
@@ -30,6 +34,8 @@ public class ConsultaFaturaResource {
     /* @complexidade - acoplamento contextual */
     private final CartaoRepository cartaoRepository;
 
+    private final Logger logger = LoggerFactory.getLogger(Fatura.class);
+
 
     public ConsultaFaturaResource(FaturaRepository faturaRepository, CartaoRepository cartaoRepository) {
 
@@ -43,17 +49,20 @@ public class ConsultaFaturaResource {
     public ResponseEntity<?> buscaAtual(@PathVariable String numeroCartao){
 
         /* @complexidade */
-        var cartao =
-                cartaoRepository.findByNumero(numeroCartao);
+        var cartao = cartaoRepository.findByNumero(numeroCartao);
 
         /* @complexidade */
         if(cartao.isEmpty()){
+
+            logger.info("[INFO] Cartão relativo à fatura não foi encontrado");
+
             return ResponseEntity.notFound().build();
         }
 
         /* @complexidade */
-        var fatura =
-                faturaRepository.findByCartao(cartao.get()).orElseThrow();
+        var fatura = faturaRepository.findByCartao(cartao.get()).orElseThrow();
+
+        logger.info("[INFO] Fatura foi devidamente retornada ao cliente");
 
                                     /* @complexidade */
         return ResponseEntity.ok(new FaturaDto(fatura));

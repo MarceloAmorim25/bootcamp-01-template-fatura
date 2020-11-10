@@ -1,9 +1,13 @@
 package br.com.fatura.resource;
 
 import br.com.fatura.dtos.CartaoVirtualRequest;
+import br.com.fatura.entidades.Cartao;
+import br.com.fatura.entidades.CartaoVirtual;
 import br.com.fatura.integracoes.IntegracaoApiCartoes;
 import br.com.fatura.repository.CartaoRepository;
 import br.com.fatura.repository.CartaoVirtualRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -25,6 +29,9 @@ public class CartaoVirtualResource {
     /* @complexidade - acoplamento contextual */
     private final IntegracaoApiCartoes integracaoApiCartoes;
 
+    private final Logger logger = LoggerFactory.getLogger(CartaoVirtual.class);
+
+
     public CartaoVirtualResource(CartaoVirtualRepository cartaoVirtualRepository, CartaoRepository cartaoRepository,
                                  IntegracaoApiCartoes integracaoApiCartoes) {
         this.cartaoVirtualRepository = cartaoVirtualRepository;
@@ -44,6 +51,8 @@ public class CartaoVirtualResource {
 
         /* @complexidade */
         cartaoVirtualRepository.save(cartao);
+
+        logger.info("[INFO] Cartão Virtual criado com sucesso.");
 
         return ResponseEntity.created(uriComponentsBuilder
                 .buildAndExpand("/api/cartoes-virtuais/{numeroCartao}", numeroCartao)

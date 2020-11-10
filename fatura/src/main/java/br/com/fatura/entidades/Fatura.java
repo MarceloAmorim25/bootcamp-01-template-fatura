@@ -50,7 +50,7 @@ public class Fatura {
     private BigDecimal total = new BigDecimal(0);
 
     @NotNull
-    private LocalDateTime vencimento;
+    private LocalDateTime vencimento = LocalDateTime.now().withDayOfMonth(30);
 
     @Enumerated(EnumType.STRING)
     private StatusAprovacao statusAlteracaoVencimento;
@@ -61,11 +61,6 @@ public class Fatura {
     public Fatura(Cartao cartao, RecebeTransacao recebeTransacao) {
         this.cartao = cartao;
         this.mes = defineMesDaFatura(recebeTransacao.getEfetivadaEm());
-        this.vencimento = vencimentoPadrao();
-    }
-
-    public LocalDateTime vencimentoPadrao(){
-        return geradaEm.withDayOfMonth(30);
     }
 
     public void alteraVencimento(String novoVencimento){
@@ -80,7 +75,8 @@ public class Fatura {
 
     public Month defineMesDaFatura(String efetivadaEm){
 
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss")
+        DateTimeFormatter formatter = DateTimeFormatter
+                .ofPattern("yyyy-MM-dd'T'HH:mm:ss")
                 .withZone(ZoneId.of("UTC"));
 
         return LocalDateTime.parse(efetivadaEm, formatter).getMonth();

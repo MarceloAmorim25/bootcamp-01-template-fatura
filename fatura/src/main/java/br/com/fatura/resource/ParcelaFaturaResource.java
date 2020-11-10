@@ -1,9 +1,13 @@
 package br.com.fatura.resource;
 
 import br.com.fatura.dtos.ParcelaRequest;
+import br.com.fatura.entidades.Fatura;
+import br.com.fatura.entidades.Parcela;
 import br.com.fatura.integracoes.IntegracaoApiCartoes;
 import br.com.fatura.repository.FaturaRepository;
 import br.com.fatura.repository.ParcelaRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -30,6 +34,8 @@ public class ParcelaFaturaResource {
 
     private final EntityManager entityManager;
 
+    private final Logger logger = LoggerFactory.getLogger(Parcela.class);
+
 
     public ParcelaFaturaResource(FaturaRepository faturaRepository, IntegracaoApiCartoes integracaoApiCartoes,
                                  ParcelaRepository parcelaRepository, EntityManager entityManager) {
@@ -51,6 +57,9 @@ public class ParcelaFaturaResource {
 
         /* @complexidade */
         if(fatura.isEmpty()){
+
+            logger.info("[INFO] Fatura não foi encontrada pelo identificador");
+
             return ResponseEntity.notFound().build();
         }
 
@@ -62,6 +71,8 @@ public class ParcelaFaturaResource {
 
         /* @complexidade */
         parcela.avisaLegadoEAtualizaStatus(integracaoApiCartoes, numeroCartao, parcelaRequest, entityManager);
+
+        logger.info("[INFO] Solicitação de parcelamento de fatura registrada");
 
         return ResponseEntity.created(uriComponentsBuilder
                         .buildAndExpand("/api/faturas/parcelas/{numeroCartao}/{identificadorFatura}", numeroCartao, identificadorFatura)
