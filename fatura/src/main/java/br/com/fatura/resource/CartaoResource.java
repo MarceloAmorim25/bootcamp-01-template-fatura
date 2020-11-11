@@ -37,20 +37,15 @@ public class CartaoResource {
     @GetMapping("/{numeroCartao}")
     public ResponseEntity<?> consultaSaldo(@PathVariable String numeroCartao){
 
-        /* @complexidade */
+        /* @complexidade + @complexidade */
         var cartao = cartaoRepository.findByNumero(numeroCartao);
-
-        /* @complexidade */
         if(cartao.isEmpty()){
-
             logger.info("[INFO] Cartão buscado não foi encontrado");
-
             return ResponseEntity.notFound().build();
         }
 
         /* @complexidade */
         var saldo = cartao.get().calculaSaldo(integracaoApiCartoes);
-
         logger.info("[INFO] Cartão foi encontrado e saldo retornado");
 
         return ResponseEntity.ok(saldo);

@@ -34,7 +34,6 @@ public class Renegociacao {
     @Positive
     private BigDecimal valor;
 
-    @Enumerated(value = EnumType.STRING)
     private StatusAprovacao status;
 
     @Deprecated

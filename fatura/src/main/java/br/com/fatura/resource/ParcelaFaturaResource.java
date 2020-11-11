@@ -52,26 +52,19 @@ public class ParcelaFaturaResource {
     public ResponseEntity<?> parcela(@PathVariable String numeroCartao, @PathVariable String identificadorFatura,
                                      @RequestBody ParcelaRequest parcelaRequest, UriComponentsBuilder uriComponentsBuilder){
 
-        /* @complexidade */
+        /* @complexidade + @complexidade */
         var fatura = faturaRepository.findById(identificadorFatura);
-
-        /* @complexidade */
         if(fatura.isEmpty()){
-
             logger.info("[INFO] Fatura não foi encontrada pelo identificador");
-
             return ResponseEntity.notFound().build();
         }
 
-        /* @complexidade */
+        /* @complexidade + @complexidade */
         var parcela = parcelaRequest.toModel(fatura.get());
-
-        /* @complexidade */
         parcelaRepository.save(parcela);
 
         /* @complexidade */
         parcela.avisaLegadoEAtualizaStatus(integracaoApiCartoes, numeroCartao, parcelaRequest, entityManager);
-
         logger.info("[INFO] Solicitação de parcelamento de fatura registrada");
 
         return ResponseEntity.created(uriComponentsBuilder

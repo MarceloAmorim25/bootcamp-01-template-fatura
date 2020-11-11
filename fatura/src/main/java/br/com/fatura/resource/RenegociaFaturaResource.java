@@ -53,25 +53,24 @@ public class RenegociaFaturaResource {
     public ResponseEntity<?> renegocia(@PathVariable String numeroCartao, @PathVariable String identificadorFatura,
                                        @RequestBody RenegociacaoRequest renegociacaoRequest, UriComponentsBuilder uriComponentsBuilder){
 
-        /* @complexidade */
-        var fatura = faturaRepository.findById(identificadorFatura);
 
-        /* @complexidade */
+        /* @complexidade + @complexidade */
+        var fatura = faturaRepository.findById(identificadorFatura);
         if(fatura.isEmpty()){
             logger.info("[INFO] Fatura não encontrada pelo identificador");
             return ResponseEntity.notFound().build();
         }
 
-        /* @complexidade */
-        var renegociacao = renegociacaoRequest.toModel(fatura.get());
 
-        /* @complexidade */
+        /* @complexidade + @complexidade */
+        var renegociacao = renegociacaoRequest.toModel(fatura.get());
         renegociacaoRepository.save(renegociacao);
+
 
         /* @complexidade */
         renegociacao.avisaLegadoAtualizaStatus(integracaoApiCartoes, numeroCartao, renegociacaoRequest, entityManager);
-
         logger.info("[INFO] Solicitação de renegociação registrada");
+
 
         return ResponseEntity.created(uriComponentsBuilder
                 .buildAndExpand("/api/faturas/renegociacoes/{numeroCartao}/{identificadorFatura}", numeroCartao, identificadorFatura)

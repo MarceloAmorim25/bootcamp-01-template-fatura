@@ -40,7 +40,6 @@ public class CartaoVirtual {
     private final LocalDateTime validade  = LocalDateTime.now().plusDays(2);
 
     /* ao realizar uma compra, o status ficara como invalido */
-    @Enumerated(EnumType.STRING)
     private StatusCartaoVirtual realizouCompra;
 
     @Deprecated

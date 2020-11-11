@@ -52,7 +52,6 @@ public class Fatura {
     @NotNull
     private LocalDateTime vencimento = LocalDateTime.now().withDayOfMonth(30);
 
-    @Enumerated(EnumType.STRING)
     private StatusAprovacao statusAlteracaoVencimento;
 
     @Deprecated
@@ -95,6 +94,20 @@ public class Fatura {
                 .collect(Collectors.toList());
 
     }
+
+    public List<TransacaoDto> toDtoListPorPeriodo(int mes, int ano){
+
+        List<TransacaoDto> transacaoDtos = new ArrayList<>();
+
+        this.transacoes.forEach(transacao -> { transacaoDtos.add(new TransacaoDto(transacao)); });
+
+        return transacaoDtos
+                .stream()
+                .filter(t -> t.getEfetivadaEm().getMonth().getValue() == mes &&
+                        t.getEfetivadaEm().getYear() == ano).collect(Collectors.toList());
+
+    }
+
 
     public BigDecimal calculaEbuscaTotal(){
 
@@ -140,4 +153,11 @@ public class Fatura {
         return mes;
     }
 
+    public List<Transacao> getTransacoes() {
+        return transacoes;
+    }
+
+    public void setTransacoes(List<Transacao> transacoes) {
+        this.transacoes = transacoes;
+    }
 }

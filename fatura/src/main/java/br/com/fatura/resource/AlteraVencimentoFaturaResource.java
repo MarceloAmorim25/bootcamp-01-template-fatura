@@ -45,21 +45,15 @@ public class AlteraVencimentoFaturaResource {
     public ResponseEntity<?> alteraVencimento(@PathVariable String numeroCartao, @PathVariable String identificadorFatura,
                                               @RequestBody AlteraVencimentoRequest alteraVencimentoRequest){
 
-        /* @complexidade */
-        var fatura =
-                faturaRepository.findById(identificadorFatura);
-
-        /* @complexidade */
+        /* @complexidade + @complexidade */
+        var fatura = faturaRepository.findById(identificadorFatura);
         if(fatura.isEmpty()){
-
             logger.info("[INFO] A fatura buscada não foi encontrada");
-
             return ResponseEntity.notFound().build();
         }
 
         /* @complexidade */
         fatura.get().avisaLegadoAtualizaVencimento(alteraVencimentoRequest, integracaoApiCartoes, numeroCartao, entityManager);
-
         logger.info("[INFO] A fatura do mês {} foi encontrada", fatura.get().getMes());
 
         return ResponseEntity.ok().build();

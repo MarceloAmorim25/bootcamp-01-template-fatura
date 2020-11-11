@@ -20,9 +20,11 @@ public class Cartao {
     private String id;
 
     @NotBlank
+    @Column(unique = true)
     private String numero;
 
     @NotBlank
+    @Column(unique = true)
     private String email;
 
     @OneToMany(mappedBy = "cartao", cascade = CascadeType.MERGE)
@@ -42,17 +44,6 @@ public class Cartao {
         this.email = email;
     }
 
-    public FaturaDto buscaFaturasPorPeriodo(int mes, int ano){
-
-        var fatura = this.faturas
-                    .stream()
-                    .filter(f -> f.getMes().getValue() == mes && f.getGeradaEm().getYear() == ano)
-                    .findAny()
-                    .orElseThrow();
-
-        return new FaturaDto(fatura);
-
-    }
 
     public BigDecimal calculaSaldo(IntegracaoApiCartoes integracaoApiCartoes){
 
