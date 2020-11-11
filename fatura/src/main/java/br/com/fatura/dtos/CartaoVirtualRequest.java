@@ -1,8 +1,8 @@
 package br.com.fatura.dtos;
 
-
+import br.com.fatura.entidades.Cartao;
 import br.com.fatura.entidades.CartaoVirtual;
-import br.com.fatura.repository.CartaoRepository;
+
 
 public class CartaoVirtualRequest {
 
@@ -15,12 +15,8 @@ public class CartaoVirtualRequest {
         this.numeroCartao = numeroCartao;
     }
 
-    public CartaoVirtual toModel(CartaoRepository cartaoRepository){
-
-        var cartao = cartaoRepository.findByNumero(this.numeroCartao);
-
-        return new CartaoVirtual(cartao.get());
-
+    public CartaoVirtual toModel(Cartao cartao){
+        return new CartaoVirtual(cartao);
     }
 
     public String getNumeroCartao() {

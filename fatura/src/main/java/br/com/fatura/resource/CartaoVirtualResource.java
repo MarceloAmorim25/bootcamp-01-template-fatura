@@ -46,11 +46,16 @@ public class CartaoVirtualResource {
     public ResponseEntity<?> gera(@RequestBody @Valid CartaoVirtualRequest cartaoVirtualRequest, @PathVariable
                                   String numeroCartao, UriComponentsBuilder uriComponentsBuilder){
 
+        /* @complexidade + @complexidade + @complexidade*/
+        var cartao = cartaoRepository.findByNumero(numeroCartao);
+        if(cartao.isEmpty()){
+            return ResponseEntity.notFound().build();
+        }
 
         /* @complexidade + @complexidade + @complexidade*/
-        var cartao = cartaoVirtualRequest.toModel(cartaoRepository);
-        cartao.defineLimite(integracaoApiCartoes);
-        cartaoVirtualRepository.save(cartao);
+        var cartaoVirtual = cartaoVirtualRequest.toModel(cartao.get());
+        cartaoVirtual.defineLimite(integracaoApiCartoes);
+        cartaoVirtualRepository.save(cartaoVirtual);
         logger.info("[INFO] Cartão Virtual criado com sucesso.");
 
 
