@@ -17,16 +17,16 @@ public class TransacaoConsumer {
 
     /* pontos de dificuldade de entendimento -> 7 pontos */
 
-    /* @complexidade */
+    /* @complexidade - acoplamento contextual */
     private final FaturaRepository faturaRepository;
 
-    /* @complexidade */
+    /* @complexidade - acoplamento contextual */
     private final CartaoRepository cartaoRepository;
 
-    /* @complexidade */
+    /* @complexidade - acoplamento contextual */
     private final TransacaoRepository transacaoRepository;
 
-    /* @complexidade */
+    /* @complexidade - acoplamento contextual */
     private final ProcessaTransacaoService processaTransacaoService;
 
     private final Logger logger = LoggerFactory.getLogger(Fatura.class);
