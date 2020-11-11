@@ -14,6 +14,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
+import javax.validation.Valid;
 
 @RestController
 @RequestMapping("/api/faturas/")
@@ -50,7 +51,7 @@ public class ParcelaFaturaResource {
     @Transactional
     @PostMapping("parcelas/{numeroCartao}/{identificadorFatura}")
     public ResponseEntity<?> parcela(@PathVariable String numeroCartao, @PathVariable String identificadorFatura,
-                                     @RequestBody ParcelaRequest parcelaRequest, UriComponentsBuilder uriComponentsBuilder){
+                                     @RequestBody @Valid ParcelaRequest parcelaRequest, UriComponentsBuilder uriComponentsBuilder){
 
         /* @complexidade + @complexidade */
         var fatura = faturaRepository.findById(identificadorFatura);

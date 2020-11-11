@@ -1,22 +1,20 @@
 package br.com.fatura.resource;
 
+import br.com.fatura.dtos.SaldoDto;
 import br.com.fatura.entidades.Cartao;
-import br.com.fatura.entidades.Fatura;
 import br.com.fatura.integracoes.IntegracaoApiCartoes;
 import br.com.fatura.repository.CartaoRepository;
-import br.com.fatura.repository.FaturaRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Objects;
 
 @RestController
 @RequestMapping("/api/cartoes")
 public class CartaoResource {
 
-    /* pontos de dificuldade de entendimento -> 5 pontos */
+    /* pontos de dificuldade de entendimento -> 6 pontos */
 
     /* @complexidade - acoplamento contextual */
     private final CartaoRepository cartaoRepository;
@@ -48,7 +46,8 @@ public class CartaoResource {
         var saldo = cartao.get().calculaSaldo(integracaoApiCartoes);
         logger.info("[INFO] Cartão foi encontrado e saldo retornado");
 
-        return ResponseEntity.ok(saldo);
+                                    /* @complexidade */
+        return ResponseEntity.ok(new SaldoDto(saldo, cartao.get()));
 
     }
 }

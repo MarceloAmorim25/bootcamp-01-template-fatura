@@ -2,16 +2,23 @@ package br.com.fatura.dtos;
 
 import br.com.fatura.entidades.Fatura;
 import br.com.fatura.entidades.Renegociacao;
-
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
 import java.math.BigDecimal;
+
 
 public class RenegociacaoRequest {
 
-
+    @NotBlank
     private String identificadorDaFatura;
 
+    @Positive
+    @NotNull
     private Integer quantidade;
 
+    @Positive
+    @NotNull
     private BigDecimal valor;
 
 

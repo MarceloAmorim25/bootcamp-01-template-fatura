@@ -10,7 +10,6 @@ import java.math.BigDecimal;
 
 public class ParcelaRequest {
 
-
     @NotBlank
     private String identificadorDaFatura;
 
@@ -19,6 +18,7 @@ public class ParcelaRequest {
     private Integer quantidade;
 
     @Positive
+    @NotNull
     private BigDecimal valor;
 
 

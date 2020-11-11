@@ -37,12 +37,14 @@ public class ConsultaFaturaResource {
     @GetMapping("/{numeroCartao}")
     public ResponseEntity<?> buscaAtual(@PathVariable String numeroCartao){
 
+
         /* @complexidade + @complexidade */
         var cartao = cartaoRepository.findByNumero(numeroCartao);
         if(cartao.isEmpty()){
             logger.info("[INFO] Cartão relativo à fatura não foi encontrado");
             return ResponseEntity.notFound().build();
         }
+
 
         /* @complexidade */
         var fatura = faturaRepository.findByCartao(cartao.get()).orElseThrow();

@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import javax.validation.Valid;
+
 @RestController
 public class CartaoVirtualResource {
 
@@ -39,16 +41,18 @@ public class CartaoVirtualResource {
         this.integracaoApiCartoes = integracaoApiCartoes;
     }
 
+
     @PostMapping("/api/cartoes-virtuais/{numeroCartao}")     /* @complexidade */
-    public ResponseEntity<?> gera(@RequestBody CartaoVirtualRequest cartaoVirtualRequest, @PathVariable
+    public ResponseEntity<?> gera(@RequestBody @Valid CartaoVirtualRequest cartaoVirtualRequest, @PathVariable
                                   String numeroCartao, UriComponentsBuilder uriComponentsBuilder){
+
 
         /* @complexidade + @complexidade + @complexidade*/
         var cartao = cartaoVirtualRequest.toModel(cartaoRepository);
         cartao.defineLimite(integracaoApiCartoes);
         cartaoVirtualRepository.save(cartao);
-
         logger.info("[INFO] Cartão Virtual criado com sucesso.");
+
 
         return ResponseEntity.created(uriComponentsBuilder
                 .buildAndExpand("/api/cartoes-virtuais/{numeroCartao}", numeroCartao)

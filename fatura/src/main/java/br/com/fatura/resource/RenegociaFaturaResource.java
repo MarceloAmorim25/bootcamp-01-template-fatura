@@ -1,7 +1,6 @@
 package br.com.fatura.resource;
 
 import br.com.fatura.dtos.RenegociacaoRequest;
-import br.com.fatura.entidades.Parcela;
 import br.com.fatura.entidades.Renegociacao;
 import br.com.fatura.integracoes.IntegracaoApiCartoes;
 import br.com.fatura.repository.FaturaRepository;
@@ -11,9 +10,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
-
 import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
+import javax.validation.Valid;
 
 
 @RestController
@@ -51,7 +50,7 @@ public class RenegociaFaturaResource {
     @Transactional
     @PostMapping("renegociacoes/{numeroCartao}/{identificadorFatura}")
     public ResponseEntity<?> renegocia(@PathVariable String numeroCartao, @PathVariable String identificadorFatura,
-                                       @RequestBody RenegociacaoRequest renegociacaoRequest, UriComponentsBuilder uriComponentsBuilder){
+                                       @RequestBody @Valid RenegociacaoRequest renegociacaoRequest, UriComponentsBuilder uriComponentsBuilder){
 
 
         /* @complexidade + @complexidade */

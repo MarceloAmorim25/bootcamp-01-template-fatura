@@ -1,14 +1,13 @@
 package br.com.fatura.entidades;
 
 import br.com.fatura.dtos.FaturaDto;
+import br.com.fatura.dtos.TransacaoDto;
 import br.com.fatura.integracoes.IntegracaoApiCartoes;
 import org.hibernate.annotations.GenericGenerator;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 
 @Entity
@@ -51,6 +50,20 @@ public class Cartao {
                 Objects.requireNonNull(integracaoApiCartoes.buscarLimiteCartao(this.numero).getBody()).getLimite();
 
         return limite.subtract(this.faturas.get(0).calculaEbuscaTotal());
+
+    }
+
+    public List<TransacaoDto> retornarTransacoes(){
+
+        var transacoesDtos = new ArrayList<TransacaoDto>();
+
+        this.transacoes.forEach(transacao -> transacoesDtos.add(new TransacaoDto(transacao)));
+
+        transacoesDtos.sort(Comparator.comparing(TransacaoDto::getEfetivadaEm));
+
+        Collections.reverse(transacoesDtos);
+
+        return transacoesDtos.subList(0,10);
 
     }
 
