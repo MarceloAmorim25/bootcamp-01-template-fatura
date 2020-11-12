@@ -19,7 +19,7 @@ import javax.validation.Valid;
 public class AlteraVencimentoFaturaResource {
 
 
-    /* pontos de dificuldade de entendimento -> 6 pontos */
+    /* pontos de dificuldade de entendimento -> 7 pontos */
 
 
     /* @complexidade - acoplamento contextual */

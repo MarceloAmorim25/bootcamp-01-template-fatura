@@ -9,6 +9,8 @@ import java.time.format.DateTimeFormatter;
 @Entity
 public class Transacao {
 
+    /* pontos de dificuldade de entendimento -> 4 */
+
     @Id
     private String id;
 
@@ -18,12 +20,15 @@ public class Transacao {
     @NotNull
     private LocalDateTime efetivadaEm;
 
+    /* @complexidade (1) - classe específica do projeto */
     @ManyToOne
     private Cartao cartao;
 
+    /* @complexidade (1) - classe específica do projeto */
     @ManyToOne
     private Fatura fatura;
 
+    /* @complexidade (1) - classe específica do projeto */
     @NotNull
     @Embedded
     private  Estabelecimento estabelecimento;
@@ -42,6 +47,7 @@ public class Transacao {
         this.fatura = fatura;
     }
 
+    /* @complexidade (1) - método específico */
     public LocalDateTime converteParaLocalDateTime(String efetivadaEm){
 
         DateTimeFormatter formatter = DateTimeFormatter

@@ -65,7 +65,7 @@ public class ConsultaFaturaResource {
             return ResponseEntity.notFound().build();
         }
 
-
+        /* @complexidade */
         var fatura = faturaRepository.findByCartao(cartao.get());
 
         return ResponseEntity.ok(new FaturaDto(fatura.get(), mes, ano));

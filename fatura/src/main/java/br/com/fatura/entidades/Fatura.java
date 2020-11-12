@@ -22,20 +22,26 @@ import java.util.stream.Collectors;
 @Entity
 public class Fatura {
 
+    /* pontos de dificuldade de entendimento -> 12 */
+
     @Id
     @GeneratedValue(generator = "UUID")
     @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
     private String id;
 
+    /* @complexidade (1) - classe específica do projeto */
     @OneToMany(mappedBy = "fatura", fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
     private List<Transacao> transacoes = new ArrayList<>();
 
+    /* @complexidade (1) - classe específica do projeto */
     @OneToMany(mappedBy = "fatura", cascade = CascadeType.MERGE)
     private List<Parcela> parcelas = new ArrayList<>();
 
+    /* @complexidade (1) - classe específica do projeto */
     @OneToMany(mappedBy = "fatura", cascade = CascadeType.MERGE)
     private List<Renegociacao> renegociacoes = new ArrayList<>();
 
+    /* @complexidade (1) - classe específica do projeto */
     @ManyToOne
     private Cartao cartao;
 
@@ -52,6 +58,7 @@ public class Fatura {
     @NotNull
     private LocalDateTime vencimento = LocalDateTime.now().withDayOfMonth(30);
 
+    /* @complexidade (1) - classe específica do projeto */
     private StatusAprovacao statusAlteracaoVencimento;
 
     @Deprecated
@@ -62,16 +69,17 @@ public class Fatura {
         this.mes = defineMesDaFatura(recebeTransacao.getEfetivadaEm());
     }
 
+    /* @complexidade (1) - método específico */
     public void alteraVencimento(String novoVencimento){
-
         this.vencimento = this.vencimento.plusDays(Long.parseLong(novoVencimento));
-
     }
 
+    /* @complexidade (1) - método específico */
     public void adicionarTransacao(Transacao transacao){
         this.transacoes.add(transacao);
     }
 
+    /* @complexidade (1) - método específico */
     public Month defineMesDaFatura(String efetivadaEm){
 
         DateTimeFormatter formatter = DateTimeFormatter
@@ -82,6 +90,7 @@ public class Fatura {
 
     }
 
+    /* @complexidade (1) - método específico */
     public List<TransacaoDto> toDtoList(){
 
         List<TransacaoDto> transacaoDtos = new ArrayList<>();
@@ -95,6 +104,7 @@ public class Fatura {
 
     }
 
+    /* @complexidade (1) - método específico */
     public List<TransacaoDto> toDtoListPorPeriodo(int mes, int ano){
 
         List<TransacaoDto> transacaoDtos = new ArrayList<>();
@@ -108,7 +118,7 @@ public class Fatura {
 
     }
 
-
+    /* @complexidade (1) - método específico */
     public BigDecimal calculaEbuscaTotal(){
 
         return toDtoList().stream()
@@ -117,6 +127,7 @@ public class Fatura {
 
     }
 
+    /* @complexidade (1) - método específico */
     public void avisaLegadoAtualizaVencimento(AlteraVencimentoRequest alteraVencimentoRequest,
                                               IntegracaoApiCartoes integracaoApiCartoes, String numeroCartao,
                                               EntityManager entityManager){
@@ -132,13 +143,8 @@ public class Fatura {
 
     }
 
-
     public void setStatusAlteracaoVencimento(StatusAprovacao statusAlteracaoVencimento) {
         this.statusAlteracaoVencimento = statusAlteracaoVencimento;
-    }
-
-    public LocalDateTime getGeradaEm() {
-        return geradaEm;
     }
 
     public Cartao getCartao() {
@@ -153,11 +159,4 @@ public class Fatura {
         return mes;
     }
 
-    public List<Transacao> getTransacoes() {
-        return transacoes;
-    }
-
-    public void setTransacoes(List<Transacao> transacoes) {
-        this.transacoes = transacoes;
-    }
 }

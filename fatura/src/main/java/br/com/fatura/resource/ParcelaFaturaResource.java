@@ -1,7 +1,6 @@
 package br.com.fatura.resource;
 
 import br.com.fatura.dtos.ParcelaRequest;
-import br.com.fatura.entidades.Fatura;
 import br.com.fatura.entidades.Parcela;
 import br.com.fatura.integracoes.IntegracaoApiCartoes;
 import br.com.fatura.repository.FaturaRepository;
@@ -11,7 +10,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
-
 import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
 import javax.validation.Valid;
@@ -70,7 +68,7 @@ public class ParcelaFaturaResource {
 
         return ResponseEntity.created(uriComponentsBuilder
                         .buildAndExpand("/api/faturas/parcelas/{numeroCartao}/{identificadorFatura}", numeroCartao, identificadorFatura)
-                        .toUri()).body(parcela);
+                        .toUri()).build();
 
     }
 }

@@ -25,7 +25,7 @@ public class ConsultaSaldoTestes {
         var numeroCartaoExistente = "91766c61-7faf-4c62-bbcc-4a83cf6c4273";
 
         given()
-                .basePath("/api/cartoes" + numeroCartaoExistente)
+                .basePath("/api/cartoes/" + numeroCartaoExistente)
                 .header("Authorization", getToken())
                 .port(port)
                 .when()

@@ -15,6 +15,8 @@ import java.util.Objects;
 @Entity
 public class Parcela {
 
+    /* pontos de dificuldade de entendimento -> 3 */
+
     @Id
     @GeneratedValue(generator = "UUID")
     @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
@@ -23,6 +25,7 @@ public class Parcela {
     @NotBlank
     private String identificadorDaFatura;
 
+    /* @complexidade (1) - classe específica do projeto */
     @ManyToOne
     private Fatura fatura;
 
@@ -33,6 +36,7 @@ public class Parcela {
     @Positive
     private BigDecimal valor;
 
+    /* @complexidade (1) - classe específica do projeto */
     private StatusAprovacao status;
 
     @Deprecated
@@ -46,6 +50,7 @@ public class Parcela {
         this.fatura = fatura;
     }
 
+    /* @complexidade (1) - método específico */
     public void avisaLegadoEAtualizaStatus(IntegracaoApiCartoes integracaoApiCartoes, String numeroCartao,
                                            ParcelaRequest parcelaRequest, EntityManager entityManager){
 

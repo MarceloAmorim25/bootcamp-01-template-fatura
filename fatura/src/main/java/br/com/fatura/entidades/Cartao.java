@@ -1,6 +1,5 @@
 package br.com.fatura.entidades;
 
-import br.com.fatura.dtos.FaturaDto;
 import br.com.fatura.dtos.TransacaoDto;
 import br.com.fatura.integracoes.IntegracaoApiCartoes;
 import org.hibernate.annotations.GenericGenerator;
@@ -12,6 +11,8 @@ import java.util.*;
 
 @Entity
 public class Cartao {
+
+    /* pontos de dificuldade de entendimento -> 5 */
 
     @Id
     @GeneratedValue(generator = "UUID")
@@ -26,12 +27,15 @@ public class Cartao {
     @Column(unique = true)
     private String email;
 
+    /* @complexidade (1) - classe específica do projeto */
     @OneToMany(mappedBy = "cartao", cascade = CascadeType.MERGE)
     private List<Fatura> faturas = new ArrayList<>();
 
+    /* @complexidade (1) - classe específica do projeto */
     @OneToMany(mappedBy = "cartao", cascade = CascadeType.MERGE)
     private List<Transacao> transacoes = new ArrayList<>();
 
+    /* @complexidade (1) - classe específica do projeto */
     @OneToMany(mappedBy = "cartao", cascade = CascadeType.MERGE)
     private List<CartaoVirtual> cartoesVirtuais = new ArrayList<>();
 
@@ -43,7 +47,7 @@ public class Cartao {
         this.email = email;
     }
 
-
+    /* @complexidade (1) - método específico */
     public BigDecimal calculaSaldo(IntegracaoApiCartoes integracaoApiCartoes){
 
         var limite =
@@ -53,6 +57,7 @@ public class Cartao {
 
     }
 
+    /* @complexidade (1) - método específico */
     public List<TransacaoDto> retornarTransacoes(){
 
         var transacoesDtos = new ArrayList<TransacaoDto>();

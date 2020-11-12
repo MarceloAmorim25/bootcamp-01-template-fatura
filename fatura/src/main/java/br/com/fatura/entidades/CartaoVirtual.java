@@ -16,10 +16,7 @@ import java.util.UUID;
 @Entity
 public class CartaoVirtual {
 
-    /* regras ->
-        - validade = 48 horas
-        - deve realizar uma unica compra
-    * */
+    /* pontos de dificuldade de entendimento -> 3 */
 
     @Id
     @GeneratedValue(generator = "UUID")
@@ -32,6 +29,7 @@ public class CartaoVirtual {
     @NotBlank
     private String numero;
 
+    /* @complexidade (1) - classe específica do projeto */
     @ManyToOne
     private Cartao cartao;
 
@@ -39,7 +37,7 @@ public class CartaoVirtual {
     @NotNull
     private final LocalDateTime validade  = LocalDateTime.now().plusDays(2);
 
-    /* ao realizar uma compra, o status ficara como invalido */
+    /* @complexidade (1) - classe específica do projeto */
     private StatusCartaoVirtual realizouCompra;
 
     @Deprecated
@@ -50,6 +48,7 @@ public class CartaoVirtual {
         this.cartao = cartao;
     }
 
+    /* @complexidade (1) - método específico */
     public void defineLimite(IntegracaoApiCartoes integracaoApiCartoes){
 
         this.limite =

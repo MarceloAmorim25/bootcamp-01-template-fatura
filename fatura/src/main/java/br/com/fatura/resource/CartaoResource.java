@@ -14,13 +14,16 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/cartoes")
 public class CartaoResource {
 
-    /* pontos de dificuldade de entendimento -> 6 pontos */
+
+    /* pontos de dificuldade de entendimento -> 5 pontos */
+
 
     /* @complexidade - acoplamento contextual */
     private final CartaoRepository cartaoRepository;
 
     /* @complexidade - acoplamento contextual */
     private final IntegracaoApiCartoes integracaoApiCartoes;
+
 
     private final Logger logger = LoggerFactory.getLogger(Cartao.class);
 
@@ -38,13 +41,13 @@ public class CartaoResource {
         /* @complexidade + @complexidade */
         var cartao = cartaoRepository.findByNumero(numeroCartao);
         if(cartao.isEmpty()){
-            logger.info("[INFO] Cartão buscado não foi encontrado");
+            logger.info("[CONSULTA SALDO] Cartão buscado não foi encontrado");
             return ResponseEntity.notFound().build();
         }
 
         /* @complexidade */
         var saldo = cartao.get().calculaSaldo(integracaoApiCartoes);
-        logger.info("[INFO] Cartão foi encontrado e saldo retornado");
+        logger.info("[CONSULTA SALDO] Cartão foi encontrado e saldo retornado");
 
                                     /* @complexidade */
         return ResponseEntity.ok(new SaldoDto(saldo, cartao.get()));

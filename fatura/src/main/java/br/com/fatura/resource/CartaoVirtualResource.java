@@ -20,7 +20,7 @@ import javax.validation.Valid;
 @RestController
 public class CartaoVirtualResource {
 
-    /* pontos de dificuldade de entendimento -> 7 pontos */
+    /* pontos de dificuldade de entendimento -> 9 pontos */
 
     /* @complexidade - acoplamento contextual */
     private final CartaoVirtualRepository cartaoVirtualRepository;
@@ -46,9 +46,10 @@ public class CartaoVirtualResource {
     public ResponseEntity<?> gera(@RequestBody @Valid CartaoVirtualRequest cartaoVirtualRequest, @PathVariable
                                   String numeroCartao, UriComponentsBuilder uriComponentsBuilder){
 
-        /* @complexidade + @complexidade + @complexidade*/
+        /* @complexidade + @complexidade */
         var cartao = cartaoRepository.findByNumero(numeroCartao);
         if(cartao.isEmpty()){
+            logger.info("[CARTÃO VIRTUAL] Número do cartão não encontrado.");
             return ResponseEntity.notFound().build();
         }
 
@@ -56,7 +57,7 @@ public class CartaoVirtualResource {
         var cartaoVirtual = cartaoVirtualRequest.toModel(cartao.get());
         cartaoVirtual.defineLimite(integracaoApiCartoes);
         cartaoVirtualRepository.save(cartaoVirtual);
-        logger.info("[INFO] Cartão Virtual criado com sucesso.");
+        logger.info("[CARTÃO VIRTUAL] Cartão Virtual criado com sucesso.");
 
 
         return ResponseEntity.created(uriComponentsBuilder

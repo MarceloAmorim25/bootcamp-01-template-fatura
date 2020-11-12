@@ -73,7 +73,7 @@ public class RenegociaFaturaResource {
 
         return ResponseEntity.created(uriComponentsBuilder
                 .buildAndExpand("/api/faturas/renegociacoes/{numeroCartao}/{identificadorFatura}", numeroCartao, identificadorFatura)
-                .toUri()).body(renegociacao);
+                .toUri()).build();
 
     }
 }

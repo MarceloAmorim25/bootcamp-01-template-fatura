@@ -15,6 +15,8 @@ import java.util.Objects;
 @Entity
 public class Renegociacao {
 
+    /* pontos de dificuldade de entendimento -> 3 */
+
     @Id
     @GeneratedValue(generator = "UUID")
     @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
@@ -23,6 +25,7 @@ public class Renegociacao {
     @NotBlank
     private String identificadorDaFatura;
 
+    /* @complexidade (1) - classe específica do projeto */
     @ManyToOne
     private Fatura fatura;
 
@@ -34,6 +37,7 @@ public class Renegociacao {
     @Positive
     private BigDecimal valor;
 
+    /* @complexidade (1) - classe específica do projeto */
     private StatusAprovacao status;
 
     @Deprecated
@@ -46,6 +50,7 @@ public class Renegociacao {
         this.fatura = fatura;
     }
 
+    /* @complexidade (1) - método específico */
     public void avisaLegadoAtualizaStatus(IntegracaoApiCartoes integracaoApiCartoes, String numeroCartao,
                                           RenegociacaoRequest renegociacaoRequest, EntityManager entityManager){
 
