@@ -1,23 +1,11 @@
-# Use the official maven/Java 8 image to create a build artifact.
-# https://hub.docker.com/_/maven
-FROM maven:3.5-jdk-8-alpine as builder
+## Builder Image
+FROM maven:3.6.3-jdk-11 AS builder
+COPY src /usr/src/app/src
+COPY pom.xml /usr/src/app
+RUN mvn -f /usr/src/app/pom.xml clean package -DskipTests
 
-# Copy local code to the container image.
-WORKDIR /app
-COPY pom.xml .
-COPY src ./src
-
-# Build a release artifact.
-RUN mvn package -DskipTests
-
-# Use AdoptOpenJDK for base image.
-# It's important to use OpenJDK 8u191 or above that has container support enabled.
-# https://hub.docker.com/r/adoptopenjdk/openjdk8
-# https://docs.docker.com/develop/develop-images/multistage-build/#use-multi-stage-builds
-FROM adoptopenjdk/openjdk8:jdk8u202-b08-alpine-slim
-
-# Copy the jar to the production image from the builder stage.
-COPY --from=builder /app/target/fatura-*.jar /fatura.jar
-
-# Run the web service on container startup.
-CMD ["java", "-Djava.security.egd=file:/dev/./urandom", "-jar", "/fatura.jar"]
+## Runner Image
+FROM openjdk:11
+COPY --from=builder /usr/src/app/target/fatura-0.0.1-SNAPSHOT.jar /usr/app/app.jar
+EXPOSE 8080
+ENTRYPOINT ["java","-jar","/usr/app/app.jar"]
