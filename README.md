@@ -13,7 +13,7 @@
 
 ## Pitest
 
-![](/readme-images/testesFatura.png)
+![](/readme-images/testesFatura.jpg)
 
 
 ## CDD
@@ -26,4 +26,4 @@
 
 ## CodeMR
 
-![](/readme-images/listaCodeMr.png)
+![](/readme-images/listaCodeMr.jpg)
